@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "../Navbar/Navbar";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 const colors = {
@@ -32,7 +32,7 @@ export default function Header() {
   const bodyLabelClasses = `absolute z-20 text-xs font-medium py-1 px-3 rounded-full text-white whitespace-nowrap cursor-pointer`;
 
   const [rotation, setRotation] = useState(0);
-  const [activeLabel, setActiveLabel] = useState("MARKET");
+  const [activeLabel, setActiveLabel] = useState(null);
 
   const labelAngles = {
     MARKET: -90,
@@ -70,9 +70,21 @@ export default function Header() {
   const getLabelDisplayRotation = (label) => {
     const base = labelAngles[label];
     if (base === undefined) return 0;
+
     const absAngle = norm(base + rotation);
     const vertical = isVerticalSlot(absAngle);
-    const slotRotation = vertical ? -90 : 0;
+    let slotRotation = 0;
+
+    if (vertical) {
+      slotRotation = -90;
+    } else {
+      if (absAngle >= 315 || absAngle <= 45) {
+        slotRotation = 180;
+      } else {
+        slotRotation = 0;
+      }
+    }
+
     return -rotation + slotRotation;
   };
 
@@ -215,7 +227,7 @@ export default function Header() {
           </div>
 
           <div className="flex flex-col lg:flex-row justify-center items-center mt-10 gap-16">
-            <div className="relative w-[250px] h-[250px] flex items-center justify-center">
+            <div className="relative w-[300px] h-[300px] flex items-center justify-center">
               <motion.div
                 className="relative w-full h-full flex items-center justify-center"
                 animate={{ rotate: rotation }}
@@ -224,71 +236,152 @@ export default function Header() {
                 <Image
                   src={eyePath}
                   alt="Eye"
-                  width={200}
-                  height={200}
+                  width={250}
+                  height={250}
                   className="object-contain z-10"
                 />
 
                 <Image
                   src={nerves}
                   alt="nerves"
-                  width={250}
-                  height={250}
+                  width={360}
+                  height={360}
                   className="absolute"
                 />
 
-                <motion.div
-                  onClick={() => handleClickTo("MARKET")}
-                  animate={{ rotate: getLabelDisplayRotation("MARKET") }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="absolute top-[-20px] left-1/2 -translate-x-1/2 bg-[#0B2A4A] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer hover:bg-sky-700"
-                >
-                  MARKET
-                </motion.div>
+                {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => (
+                  <motion.div
+                    key={label}
+                    onClick={() => handleClickTo(label)}
+                    animate={{ rotate: getLabelDisplayRotation(label) }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                    className={`group absolute text-xs sm:text-sm font-semibold cursor-pointer rounded-md px-6 py-2 transform-origin: center center
+            ${
+              label === "MARKET"
+                ? "top-[-25px] left-1/2 -translate-x-1/2"
+                : label === "CONCEPT"
+                ? "right-[-50px] top-1/2 -translate-y-1/2"
+                : label === "DESIGN"
+                ? "bottom-[-25px] left-1/2 -translate-x-1/2"
+                : "left-[-50px] top-1/2 -translate-y-1/2"
+            }
+            ${
+              activeLabel === label
+                ? "bg-white text-black"
+                : "bg-[#0B2A4A] text-white"
+            }`}
+                  >
+                    {label}
 
-                <motion.div
-                  onClick={() => handleClickTo("CONCEPT")}
-                  animate={{ rotate: getLabelDisplayRotation("CONCEPT") }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="absolute right-[-50px] top-1/2 -translate-y-1/2 bg-[#0B2A4A] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer hover:bg-sky-700"
-                >
-                  CONCEPT
-                </motion.div>
-
-                <motion.div
-                  onClick={() => handleClickTo("DESIGN")}
-                  animate={{ rotate: getLabelDisplayRotation("DESIGN") }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 bg-[#0B2A4A] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer hover:bg-sky-700"
-                >
-                  DESIGN
-                </motion.div>
-
-                <motion.div
-                  onClick={() => handleClickTo("TRIAL")}
-                  animate={{ rotate: getLabelDisplayRotation("TRIAL") }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="absolute left-[-40px] top-1/2 -translate-y-1/2 bg-[#0B2A4A] px-5 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer hover:bg-sky-700"
-                >
-                  TRIAL
-                </motion.div>
+                    <motion.div
+                      initial={{ x: -15, opacity: 0 }}
+                      animate={
+                        activeLabel === label
+                          ? { x: 0, opacity: 1 }
+                          : { x: 0, opacity: 0 }
+                      }
+                      whileHover={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      className={`absolute h-[3px] w-[28px] bg-white rounded-sm 
+              ${
+                label === "TRIAL"
+                  ? "-right-[35px] top-1/2 -translate-y-1/2"
+                  : label === "CONCEPT"
+                  ? "-bottom-[10px] left-1/2 -translate-x-1/2"
+                  : label === "MARKET"
+                  ? "-bottom-[10px] left-1/2 -translate-x-1/2"
+                  : "-left-[35px] top-1/2 -translate-y-1/2"
+              }`}
+                    ></motion.div>
+                  </motion.div>
+                ))}
               </motion.div>
             </div>
 
-            <div className="w-full lg:w-1/2 pt-10 lg:pl-16 flex flex-col items-center lg:items-start text-center lg:text-left">
-              <div className="bg-secondary-dark p-6 sm:p-8 rounded-lg shadow-2xl max-w-md">
-                <p className="text-base sm:text-lg font-light leading-relaxed">
+            <div className="relative w-full lg:w-1/2 pt-10 lg:pl-16 flex flex-col items-center lg:items-start text-center lg:text-left">
+              <Image
+                src={arrow}
+                alt="Curved arrow"
+                width={160}
+                height={160}
+                className="absolute left-[-35px] top-1/4 w-30"
+              />
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeLabel}
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 40 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="bg-gradient-to-r from-[#071631] to-[#13325F] p-7 sm:p-8 rounded-[22px] shadow-[0_4px_25px_rgba(0,0,0,0.25)] max-w-md text-white leading-relaxed backdrop-blur-[1px] ml-6"
+                >
+                  {activeLabel === "MARKET" && (
+                    <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
+                      The market for clinical monitoring devices, including OCT
+                      technology, is experiencing rapid growth driven by the
+                      escalating demand fir early disease detection and
+                      personalized healthcare solutions.
+                    </p>
+                  )}
+                  {activeLabel === "CONCEPT" && (
+                    <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
+                      Our research is vital for tackling the increasing global
+                      burden of eye diseases, particularly as vision impairment
+                      and blindness become more prevalent in aging populations.
+                    </p>
+                  )}
+                  {activeLabel === "DESIGN" && (
+                    <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
+                      Developing clinical monitoring systems utilizing OCT
+                      devices, with a focus on enhancing image resolution,
+                      importing ease of use, and integrating advanced data
+                      analytics.
+                    </p>
+                  )}
+                  {activeLabel === "TRIAL" && (
+                    <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
+                      Clinical trials leveraging OCT technolody are crucial for
+                      assessing the safety and efficacy of new treatments,
+                      offering real-time imaging data to monitor patient
+                      responses and outcomes.
+                    </p>
+                  )}
+
+                  <div className="flex items-center space-x-1.5 mt-6 justify-start">
+                    {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => (
+                      <div
+                        key={label}
+                        className={`w-3 h-3 rounded-[2px] ${
+                          activeLabel === label ? "bg-[#3CA8FF]" : "bg-white/35"
+                        }`}
+                      ></div>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* <div className="bg-gradient-to-r from-[#071631] to-[#13325F] p-7 sm:p-8 rounded-[22px] shadow-[0_4px_25px_rgba(0,0,0,0.25)] max-w-md text-white leading-relaxed backdrop-blur-[1px] ml-6">
+                <p className="text-[15px] sm:text-[16px] font-normal text-white/90">
                   Our research is vital for tackling the increasing global
-                  burden of eye diseases, particularly as vision impairment and
-                  blindness become more prevalent in aging populations.
+                  burden of{" "}
+                  <span className="font-semibold text-white">eye diseases</span>
+                  , particularly as{" "}
+                  <span className="font-semibold text-white">
+                    vision impairment
+                  </span>{" "}
+                  and{" "}
+                  <span className="font-semibold text-white">blindness</span>{" "}
+                  become more prevalent in aging populations.
                 </p>
-                <div className="flex space-x-2 mt-4 justify-center lg:justify-start">
-                  <div className="w-3 h-3 bg-primary-blue"></div>
-                  <div className="w-3 h-3 bg-primary-blue"></div>
-                  <div className="w-3 h-3 bg-primary-blue/50"></div>
-                  <div className="w-3 h-3 bg-primary-blue/30"></div>
+
+                <div className="flex items-center space-x-1.5 mt-6 justify-start">
+                  <div className="w-3 h-3 rounded-[2px] bg-[#3CA8FF]"></div>
+                  <div className="w-3 h-3 rounded-[2px] bg-white/35"></div>
+                  <div className="w-3 h-3 rounded-[2px] bg-white/35"></div>
+                  <div className="w-3 h-3 rounded-[2px] bg-white/35"></div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="mt-12 lg:mt-16">
                 <h3 className="text-xl sm:text-2xl font-bold uppercase tracking-wider">
