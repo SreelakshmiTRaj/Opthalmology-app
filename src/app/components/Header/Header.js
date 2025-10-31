@@ -1,8 +1,7 @@
 "use client";
-import Navbar from "../Navbar/Navbar";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 const colors = {
   primaryDark: "#0b1626",
@@ -27,13 +26,17 @@ export default function Header() {
   const eyePath = "/images/eyeImage.png";
   const nerves = "/images/Nurves.svg";
   const arrow = "/images/arrow.png";
-  const bodyGraphicPath = "/images/Body.svg";
-
-  const bodyLabelClasses = `absolute z-20 text-xs font-medium py-1 px-3 rounded-full text-white whitespace-nowrap cursor-pointer`;
 
   const [rotation, setRotation] = useState(0);
   const [activeLabel, setActiveLabel] = useState("CONCEPT");
   const [hoverLabel, setHoverLabel] = useState(null);
+  const navRef = useRef(null);
+  const itemRefs = useRef([]);
+  const [navHover, setNavHover] = useState(null);
+  const [navActive, setNavActive] = useState("Home");
+
+  const [moverX, setMoverX] = useState(0);
+  const moverWidth = 24;
 
   const labelAngles = {
     MARKET: -90,
@@ -41,6 +44,37 @@ export default function Header() {
     DESIGN: 90,
     TRIAL: 180,
   };
+
+  const updateMoverPosition = (targetItem) => {
+    const container = navRef.current;
+    if (!container) return;
+    const index = headerNavItems.indexOf(targetItem);
+    const itemEl = itemRefs.current[index];
+    if (!itemEl) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = itemEl.getBoundingClientRect();
+
+    const center = itemRect.left + itemRect.width / 2 - containerRect.left;
+    const x = center - moverWidth / 2;
+    setMoverX(Math.round(x));
+  };
+
+  useEffect(() => {
+    const t = setTimeout(() => updateMoverPosition(navActive), 0);
+    return () => clearTimeout(t);
+  }, [navActive, headerNavItems]);
+
+  useEffect(() => {
+    if (navHover) updateMoverPosition(navHover);
+    else updateMoverPosition(navActive);
+  }, [navHover]);
+
+  useEffect(() => {
+    const onResize = () => updateMoverPosition(navHover || navActive);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [navHover, navActive]);
 
   const shortestDelta = (from, to) => {
     let diff = (to - from) % 360;
@@ -122,21 +156,56 @@ export default function Header() {
           </div>
 
           <div className="hidden lg:flex items-center space-x-2">
-            <nav className="bg-slate-700/70 h-10 flex space-x-1 text-sm font-semibold rounded-lg px-4 py-3">
-              {headerNavItems.map((item) => (
-                <a
-                  key={item}
-                  href="#"
-                  className={`px-3 md:px-4 transition-colors duration-200 ${
-                    item === "Home"
-                      ? "text-sky-400"
-                      : "text-white/80 hover:text-white"
-                  }`}
-                >
-                  {item}
-                </a>
-              ))}
-            </nav>
+            <div className="hidden lg:flex items-center">
+              <nav
+                ref={navRef}
+                className="relative bg-slate-700/70 h-9 flex space-x-0.5 text-sm font-normal rounded-md px-2 py-1 overflow-hidden"
+              >
+                {headerNavItems.map((item, idx) => (
+                  <div
+                    key={item}
+                    ref={(el) => (itemRefs.current[idx] = el)}
+                    className="relative flex items-center justify-center px-1.5 cursor-pointer"
+                    onMouseEnter={() => setNavHover(item)}
+                    onMouseLeave={() => setNavHover(null)}
+                  >
+                    <a
+                      href="#"
+                      className={`px-2 transition-colors duration-200 ${
+                        item === navActive
+                          ? "text-sky-400"
+                          : "text-white/80 hover:text-white"
+                      }`}
+                      onClick={() => setNavActive(item)}
+                    >
+                      {item}
+                    </a>
+                  </div>
+                ))}
+
+                <AnimatePresence>
+                  {navHover && (
+                    <motion.div
+                      key="hover-mover"
+                      className="absolute bottom-[2px] h-[2.5px] bg-sky-400 rounded-full"
+                      initial={{ opacity: 0, scaleX: 0, originX: 0.5 }}
+                      animate={{
+                        opacity: 1,
+                        scaleX: 1,
+                        x: moverX,
+                      }}
+                      exit={{ opacity: 0, scaleX: 0 }}
+                      style={{ width: moverWidth }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </AnimatePresence>
+              </nav>
+            </div>
 
             <button className="bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 px-3 rounded-lg transition duration-150 text-xs sm:text-sm whitespace-nowrap">
               Become an Investigator
