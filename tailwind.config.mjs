@@ -1,23 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './app/**/*.{js,ts,jsx,tsx}',
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        'page-bg': '#031524', 
-        'nav-dark-bg': '#192A40',
-        'primary-blue': '#489FF5', 
-        'link-active': '#489FF5', 
-        'text-light': '#FFFFFF',
+        primaryDark: "#0b1626",
+        secondaryDark: "#1e2d40",
+        primaryBlue: "#38bdf8",
+        accentBlue: "#167ee6",
+        whiteButtonBg: "#ffffff",
       },
       fontFamily: {
-        sans: ['var(--font-body)', ...require('tailwindcss/defaultTheme').fontFamily.sans],
+        sans: [
+          "var(--font-body)",
+          ...require("tailwindcss/defaultTheme").fontFamily.sans,
+        ],
       },
     },
   },
   plugins: [],
-}
+};
