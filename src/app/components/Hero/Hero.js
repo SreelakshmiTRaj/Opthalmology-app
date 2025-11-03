@@ -8,6 +8,7 @@ export default function Hero() {
   const nerves = "/images/Nurves.svg";
   const arrow = "/images/arrow.svg";
   const line = "/images/Group 23.svg";
+  const sideArrow = "/images/sideArrow.svg";
 
   const [rotation, setRotation] = useState(0);
   const [activeLabel, setActiveLabel] = useState("CONCEPT");
@@ -138,7 +139,6 @@ export default function Hero() {
                 >
                   {label}
 
-                  {/* Active underline */}
                   {isActive && (
                     <motion.div
                       initial={{ y: 10, opacity: 0 }}
@@ -150,7 +150,6 @@ export default function Hero() {
                     />
                   )}
 
-                  {/* Hover underline */}
                   <AnimatePresence>
                     {!isActive && isHovering && (
                       <motion.div
@@ -170,7 +169,7 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        <div className="absolute top-[9rem] left-[26rem] w-[6.5rem] h-[4.1rem]">
+        <div className="absolute top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]">
           <Image
             src={arrow}
             alt="Curved arrow"
@@ -179,7 +178,6 @@ export default function Hero() {
           />
         </div>
 
-        {/* Text Box + CTA */}
         <div className="relative w-full lg:w-1/2 pt-10 lg:pl-16 flex flex-col items-center lg:items-start text-center lg:text-left">
           <AnimatePresence mode="wait">
             <motion.div
@@ -223,7 +221,6 @@ export default function Hero() {
                 </p>
               )}
 
-              {/* Small indicator dots */}
               <div className="flex items-center space-x-1.5 mt-6 justify-start">
                 {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => {
                   const isActive = activeLabel === label;
@@ -247,32 +244,31 @@ export default function Hero() {
             <h3 className="text-[1.375rem] leading-none font-bold uppercase tracking-[0.04em] text-white font-poppins">
               YOUR VISION IS OUR VISION
             </h3>
+
             <a
               href="#"
-              className="group flex items-center mt-3 text-sky-400 font-semibold transition duration-300"
+              className="group inline-flex items-center font-poppins font-semibold text-[1rem] leading-none text-[#3AADED] transition duration-300"
             >
-              Let us guide you on your journey to FDA approval
+              <span className="whitespace-nowrap">
+                Let us guide you on your journey to FDA approval
+              </span>
+
               <div
-                className="w-8 h-8 ml-3 border border-accent-blue rounded-full flex items-center justify-center 
-                  bg-transparent transition-all duration-300 ease-in-out 
-                  group-hover:bg-accent-blue group-hover:border-accent-blue group-hover:scale-110"
+                className="ml-3 w-10 h-10 border border-[#3AADED] rounded-full flex items-center justify-center 
+    bg-transparent transition-all duration-300 ease-in-out 
+    group-hover:bg-[#3AADED] group-hover:border-[#3AADED] group-hover:scale-110 relative flex-shrink-0"
               >
-                <svg
-                  className="w-4 h-4 text-accent-blue transition-all duration-300 ease-in-out group-hover:hidden"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 5l7 7-7 7"
+                <div className="relative w-4 h-4 flex items-center justify-center">
+                  <Image
+                    src={sideArrow}
+                    alt="Arrow"
+                    fill
+                    className="object-contain transition-opacity duration-300 ease-in-out group-hover:opacity-0"
                   />
-                </svg>
+                </div>
 
                 <svg
-                  className="hidden w-4 h-4 text-white transition-all duration-300 ease-in-out group-hover:block"
+                  className="absolute w-5 h-5 text-white opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
