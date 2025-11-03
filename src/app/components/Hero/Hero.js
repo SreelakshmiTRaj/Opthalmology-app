@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Hero() {
   const eyePath = "/images/eyeImage.png";
   const nerves = "/images/Nurves.svg";
-  const arrow = "/images/arrow.png";
+  const arrow = "/images/arrow.svg";
   const line = "/images/Group 23.svg";
 
   const [rotation, setRotation] = useState(0);
@@ -70,35 +70,56 @@ export default function Hero() {
 
   return (
     <main className="pt-1 pb-32 relative z-10">
-      {/* HERO TEXT */}
-      <div className="container mx-auto px-6 sm:px-8 pt-1 sm:pt-10 pb-16 sm:pb-20 text-center">
-        <h2 className="text-1xl sm:text-[10px] md:text-[30px] lg:text-[40px] font-extrabold mb-4 leading-snug sm:leading-tight text-white">
+      <div className="max-w-[57rem] mx-auto flex flex-col items-center text-center space-y-7 mt-5">
+        <h1 className="max-w-[62rem] text-3xl md:text-4xl lg:text-[2.5rem] font-semibold text-white tracking-tight">
           OPHTHALMOLOGY FOCUSED CRO{" "}
-          <span className="text-[#4DB1FF]">SINCE 2006</span>
-        </h2>
+          <span className="text-sky-400">SINCE 2006</span>
+        </h1>
 
-        <p className="max-w-3xl md:max-w-4xl mx-auto text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed sm:leading-loose px-2 sm:px-0">
+        <p className="max-w-[50rem] text-lg leading-6 font-normal text-gray-300">
           Since its establishment in 2006, our ophthalmology-focused Clinical
           Research Organization (CRO) has specialized in delivering exceptional
           research operations and administration.
         </p>
       </div>
 
-      {/* HERO GRAPHICS */}
-      <div className="flex flex-col lg:flex-row justify-center items-center mt-0 gap-16 ml-15">
-        {/* Eye & Labels */}
-        <div className="relative w-[300px] h-[300px] flex items-center justify-center">
+      <div className="relative max-w-[58.4rem] mx-auto mt-[5rem] flex flex-col lg:flex-row justify-between items-center gap-10 px-6 lg:px-0">
+        <div className="relative w-[22.4rem] h-[22.9rem] flex items-center justify-center mx-auto">
           <motion.div
             className="relative w-full h-full flex items-center justify-center"
             animate={{ rotate: rotation }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
           >
-            <Image src={eyePath} alt="Eye" fill className="object-contain scale-80" />
-            <Image src={nerves} alt="nerves" fill className="absolute" />
+            <div className="relative w-[16.3rem] h-[16.25rem]">
+              <Image
+                src={eyePath}
+                alt="Eye"
+                fill
+                className="object-contain pointer-events-none select-none"
+              />
+            </div>
+
+            <div className="absolute top-[1.2rem] left-[1.3rem] w-[19.7rem] h-[20rem]">
+              <Image
+                src={nerves}
+                alt="Nerves"
+                fill
+                className="object-contain pointer-events-none select-none"
+              />
+            </div>
 
             {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => {
               const isActive = activeLabel === label;
               const isHovering = hoverLabel === label;
+
+              const positionClasses =
+                label === "MARKET"
+                  ? "top-[0.04rem] left-1/2 -translate-x-1/2"
+                  : label === "CONCEPT"
+                  ? "right-[-2.2rem] top-45 -translate-y-1/2"
+                  : label === "DESIGN"
+                  ? "bottom-[0.2rem] left-1/2 -translate-x-1/2"
+                  : "left-[-2.1rem] top-45 -translate-y-1/2";
 
               return (
                 <motion.div
@@ -108,21 +129,16 @@ export default function Hero() {
                   onHoverEnd={() => setHoverLabel(null)}
                   animate={{ rotate: getLabelDisplayRotation(label) }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className={`group absolute text-xs sm:text-sm font-semibold cursor-pointer rounded-md px-5 py-2
-                    ${
-                      label === "MARKET"
-                        ? "top-[-25px] left-1/2 -translate-x-1/2"
-                        : label === "CONCEPT"
-                        ? "right-[-50px] top-1/2 -translate-y-1/2"
-                        : label === "DESIGN"
-                        ? "bottom-[-25px] left-1/2 -translate-x-1/2"
-                        : "left-[-50px] top-1/2 -translate-y-1/2"
-                    }
-                    ${isActive ? "bg-white text-black" : "bg-[#0B2A4A] text-white"}
-                  `}
+                  className={`group absolute ${positionClasses}
+        text-xs sm:text-sm font-semibold cursor-pointer rounded-[4px]
+        w-[6.1rem] h-[2.625rem] flex items-center justify-center
+        px-[2.125rem] py-[1rem]
+        ${isActive ? "bg-white text-black" : "bg-[#0B2A4A] text-white"}
+      `}
                 >
                   {label}
 
+                  {/* Active underline */}
                   {isActive && (
                     <motion.div
                       initial={{ y: 10, opacity: 0 }}
@@ -130,10 +146,11 @@ export default function Hero() {
                       exit={{ y: 10, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                       className={`absolute left-1/2 -translate-x-1/2 h-[3px] w-[28px] bg-white rounded-sm
-                        ${label === "CONCEPT" ? "bottom-[-6px]" : "bottom-[-10px]"}`}
+            ${label === "CONCEPT" ? "bottom-[-6px]" : "bottom-[-10px]"}`}
                     />
                   )}
 
+                  {/* Hover underline */}
                   <AnimatePresence>
                     {!isActive && isHovering && (
                       <motion.div
@@ -143,7 +160,7 @@ export default function Hero() {
                         exit={{ x: -20, opacity: 0 }}
                         transition={{ duration: 0.35, ease: "easeOut" }}
                         className={`absolute left-1/2 -translate-x-1/2 h-[3px] w-[28px] bg-white/70 rounded-sm
-                          ${label === "CONCEPT" ? "bottom-[-6px]" : "bottom-[-10px]"}`}
+              ${label === "CONCEPT" ? "bottom-[-6px]" : "bottom-[-10px]"}`}
                       />
                     )}
                   </AnimatePresence>
@@ -153,16 +170,17 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Text Box + CTA */}
-        <div className="relative w-full lg:w-1/2 pt-10 lg:pl-16 flex flex-col items-center lg:items-start text-center lg:text-left">
+        <div className="absolute top-[9rem] left-[26rem] w-[6.5rem] h-[4.1rem]">
           <Image
             src={arrow}
             alt="Curved arrow"
-            width={160}
-            height={160}
-            className="absolute left-[-35px] top-1/4 w-30"
+            fill
+            className="object-contain pointer-events-none select-none"
           />
+        </div>
 
+        {/* Text Box + CTA */}
+        <div className="relative w-full lg:w-1/2 pt-10 lg:pl-16 flex flex-col items-center lg:items-start text-center lg:text-left">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeLabel}
@@ -170,7 +188,9 @@ export default function Hero() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 40 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="bg-gradient-to-r from-[#071631] to-[#13325F] p-7 sm:p-8 rounded-[22px] shadow-[0_4px_25px_rgba(0,0,0,0.25)] max-w-md text-white leading-relaxed backdrop-blur-[1px] ml-6"
+              className="relative w-[431px] h-[221px] rounded-[32px] 
+                 bg-[linear-gradient(90deg,rgba(58,173,237,0.1)_0%,rgba(58,173,237,0.01)_100%)]
+                 backdrop-blur-[20px] p-8 text-white leading-relaxed shadow-[0_4px_25px_rgba(0,0,0,0.25)]"
             >
               {activeLabel === "MARKET" && (
                 <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
@@ -203,22 +223,28 @@ export default function Hero() {
                 </p>
               )}
 
+              {/* Small indicator dots */}
               <div className="flex items-center space-x-1.5 mt-6 justify-start">
-                {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => (
-                  <div
-                    key={label}
-                    className={`w-3 h-3 rounded-[2px] ${
-                      activeLabel === label ? "bg-[#3CA8FF]" : "bg-white/35"
-                    }`}
-                  ></div>
-                ))}
+                {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => {
+                  const isActive = activeLabel === label;
+                  return (
+                    <div
+                      key={label}
+                      className={`h-[9px] transition-all duration-300 rounded-[2px] ${
+                        isActive
+                          ? "w-[19px] bg-[#3AADED] opacity-100"
+                          : "w-[9px] bg-white/35 opacity-80"
+                      }`}
+                    ></div>
+                  );
+                })}
               </div>
             </motion.div>
           </AnimatePresence>
 
           {/* CTA */}
-          <div className="mt-15 lg:mt-16 flex flex-col items-start text-left w-fit mx-auto">
-            <h3 className="text-xl sm:text-2xl font-bold uppercase tracking-wider">
+          <div className="mt-10 w-[27rem] h-[4.4rem] rounded-[24px] flex flex-col justify-center px-6">
+            <h3 className="text-[1.375rem] leading-none font-bold uppercase tracking-[0.04em] text-white font-poppins">
               YOUR VISION IS OUR VISION
             </h3>
             <a
@@ -237,7 +263,12 @@ export default function Hero() {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
 
                 <svg
@@ -246,7 +277,12 @@ export default function Hero() {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m0 0l-5-5m5 5l-5 5" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 12h14m0 0l-5-5m5 5l-5 5"
+                  />
                 </svg>
               </div>
             </a>
