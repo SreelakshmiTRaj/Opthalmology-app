@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
-const Label = ({ label, isRightSide }) => {
+const Label = ({ label, isRightSide, onClickLabel }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const baseBackground = isRightSide
@@ -15,11 +15,11 @@ const Label = ({ label, isRightSide }) => {
     : "linear-gradient(-90deg, rgba(58, 173, 237, 0.5) 0%, rgba(58, 173, 237, 0) 75%)";
 
   return (
-    <motion.div 
+    <motion.div
       className={`absolute flex items-center justify-center text-sm font-bold rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label transition-all duration-300 ease-in-out cursor-pointer
         ${
           isHovered
-            ? "text-[#3AADED] border border-[#3AADED] " 
+            ? "text-[#3AADED] border border-[#3AADED]"
             : "text-white border border-transparent"
         }
       `}
@@ -31,9 +31,8 @@ const Label = ({ label, isRightSide }) => {
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      animate={{
-        x: isHovered ? (isRightSide ? -5 : 5) : 0, 
-      }}
+      onClick={() => onClickLabel(label.text)}
+      animate={{ x: isHovered ? (isRightSide ? -5 : 5) : 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {label.text}
@@ -42,12 +41,12 @@ const Label = ({ label, isRightSide }) => {
 };
 
 export default function Body() {
-  const bodyPath = "/images/body.svg";
   const lightPath = "/images/bodyLighting.svg";
   const personIconPath = "/images/personIcon.svg";
   const blueIconPath = "/images/blueIcon.svg";
 
   const [visible, setVisible] = useState(true);
+  const [selectedLabel, setSelectedLabel] = useState(null);
 
   const handleSectionClick = (e) => {
     if (
@@ -59,8 +58,20 @@ export default function Body() {
     }
 
     setVisible(false);
+    setSelectedLabel(null); // reset image
     setTimeout(() => setVisible(true), 500);
   };
+
+  const handleLabelClick = (labelText) => {
+    setSelectedLabel((prev) => (prev === labelText ? null : labelText));
+  };
+
+  const bodyImagePath = selectedLabel
+  ? `/images/${selectedLabel
+      .toLowerCase()
+      .replace(/['’\s]+/g, "")}.svg`
+  : "/images/body.svg";
+
 
   return (
     <section
@@ -75,6 +86,7 @@ export default function Body() {
       </h2>
 
       <div className="relative w-[1101px] h-[745px]">
+        {/* LIGHT */}
         <div className="absolute w-[500px] h-[520px] top-[200px] left-[590px] opacity-80">
           <Image
             src={lightPath}
@@ -84,15 +96,26 @@ export default function Body() {
           />
         </div>
 
-        <div className="absolute w-[380px] h-[850px] top-[-80px] left-[650px] body-image">
-          <Image
-            src={bodyPath}
-            alt="Human body"
-            fill
-            className="object-contain pointer-events-none select-none drop-shadow-[0_0_25px_rgba(58,173,237,0.3)]"
-          />
-        </div>
+        {/* BODY IMAGE (with animation) */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={bodyImagePath}
+            className="absolute w-[380px] h-[850px] top-[-80px] left-[650px] body-image"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+          >
+            <Image
+              src={bodyImagePath}
+              alt={selectedLabel || "Human body"}
+              fill
+              className="object-contain pointer-events-none select-none drop-shadow-[0_0_25px_rgba(58,173,237,0.3)]"
+            />
+          </motion.div>
+        </AnimatePresence>
 
+        {/* RIGHT SIDE LABELS */}
         {[
           { text: "Neurology", top: "85px", left: "935px", width: "110px" },
           {
@@ -128,9 +151,15 @@ export default function Body() {
           },
           { text: "Genetics", top: "615px", left: "920px", width: "100px" },
         ].map((label, idx) => (
-          <Label key={`right-${idx}`} label={label} isRightSide={true} />
+          <Label
+            key={`right-${idx}`}
+            label={label}
+            isRightSide={true}
+            onClickLabel={handleLabelClick}
+          />
         ))}
 
+        {/* LEFT SIDE LABELS */}
         {[
           {
             text: "Endocrinology",
@@ -150,7 +179,12 @@ export default function Body() {
           { text: "Urology", top: "500px", left: "615px", width: "91px" },
           { text: "Virology", top: "580px", left: "630px", width: "91px" },
         ].map((label, idx) => (
-          <Label key={`left-${idx}`} label={label} isRightSide={false} />
+          <Label
+            key={`left-${idx}`}
+            label={label}
+            isRightSide={false}
+            onClickLabel={handleLabelClick}
+          />
         ))}
 
         <motion.div
