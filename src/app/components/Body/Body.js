@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const Label = ({ label, isRightSide, onClickLabel }) => {
+const Label = ({ label, isRightSide, onClickLabel, isActive }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const baseBackground = isRightSide
@@ -14,11 +14,13 @@ const Label = ({ label, isRightSide, onClickLabel }) => {
     ? "linear-gradient(90deg, rgba(58, 173, 237, 0.5) 0%, rgba(58, 173, 237, 0) 75%)"
     : "linear-gradient(-90deg, rgba(58, 173, 237, 0.5) 0%, rgba(58, 173, 237, 0) 75%)";
 
+  const isHighlighted = isHovered || isActive;
+
   return (
     <motion.div
       className={`absolute flex items-center justify-center text-sm font-bold rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label transition-all duration-300 ease-in-out cursor-pointer
         ${
-          isHovered
+          isHighlighted
             ? "text-[#3AADED] border border-[#3AADED]"
             : "text-white border border-transparent"
         }
@@ -27,12 +29,12 @@ const Label = ({ label, isRightSide, onClickLabel }) => {
         top: label.top,
         left: label.left,
         width: label.width,
-        background: isHovered ? hoverBackground : baseBackground,
+        background: isHighlighted ? hoverBackground : baseBackground,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onClickLabel(label.text)}
-      animate={{ x: isHovered ? (isRightSide ? -5 : 5) : 0 }}
+      animate={{ x: isHighlighted ? (isRightSide ? -5 : 5) : 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {label.text}
@@ -46,32 +48,93 @@ export default function Body() {
   const blueIconPath = "/images/blueIcon.svg";
 
   const [visible, setVisible] = useState(true);
-  const [selectedLabel, setSelectedLabel] = useState(null);
+  const [selectedLabel, setSelectedLabel] = useState(null); // start with body.svg
+  const [isManual, setIsManual] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  const rightSideLabels = [
+    { text: "Neurology", top: "85px", left: "935px", width: "110px" },
+    { text: "Cardiovascular", top: "160px", left: "990px", width: "147px" },
+    { text: "Dermatology", top: "243px", left: "980px", width: "130px" },
+    { text: "Radiation Oncology", top: "325px", left: "960px", width: "181px" },
+    { text: "Skeletal System", top: "407px", left: "975px", width: "154px" },
+    { text: "Women’s Health", top: "475px", left: "960px", width: "155px" },
+    { text: "Emerging Viruses", top: "550px", left: "950px", width: "167px" },
+    { text: "Genetics", top: "615px", left: "920px", width: "100px" },
+  ];
+
+  const leftSideLabels = [
+    { text: "Endocrinology", top: "120px", left: "600px", width: "142px" },
+    { text: "Gastroenterology", top: "185px", left: "530px", width: "166px" },
+    { text: "Geriatrics", top: "265px", left: "600px", width: "106px" },
+    { text: "Hepatology", top: "340px", left: "555px", width: "120px" },
+    { text: "Inflammation", top: "420px", left: "560px", width: "132px" },
+    { text: "Urology", top: "500px", left: "615px", width: "91px" },
+    { text: "Virology", top: "580px", left: "630px", width: "91px" },
+  ];
+
+  const sequence = [
+    ...rightSideLabels.map((l) => l.text),
+    ...[...leftSideLabels].reverse().map((l) => l.text),
+  ];
+
+  useEffect(() => {
+    const startDelay = setTimeout(
+      () => {
+        let index = currentIndex;
+
+        const startCycle = () => {
+          intervalRef.current = setInterval(() => {
+            index = (index + 1) % sequence.length;
+            setSelectedLabel(sequence[index]);
+            setCurrentIndex(index);
+          }, 5000);
+        };
+
+        if (!isManual) startCycle();
+
+        return () => clearInterval(intervalRef.current);
+      },
+      selectedLabel === null ? 3000 : 0
+    );
+
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(startDelay);
+    };
+  }, [isManual]);
+
+  const handleLabelClick = (labelText) => {
+    clearInterval(intervalRef.current);
+    clearTimeout(timeoutRef.current);
+
+    // Manual selection
+    setSelectedLabel(labelText);
+    setIsManual(true);
+
+    // Resume auto-cycle after 5s — continuing from where it left off
+    timeoutRef.current = setTimeout(() => {
+      setIsManual(false);
+    }, 5000);
+  };
+
+  // Determine which image to show
+  const bodyImagePath = selectedLabel
+    ? `/images/${selectedLabel.toLowerCase().replace(/['’\s]+/g, "")}.svg`
+    : "/images/body.svg";
 
   const handleSectionClick = (e) => {
     if (
       e.target.closest(".body-image") ||
       e.target.closest(".label") ||
       e.target.closest(".chat-bubble")
-    ) {
+    )
       return;
-    }
-
     setVisible(false);
-    setSelectedLabel(null); // reset image
     setTimeout(() => setVisible(true), 500);
   };
-
-  const handleLabelClick = (labelText) => {
-    setSelectedLabel((prev) => (prev === labelText ? null : labelText));
-  };
-
-  const bodyImagePath = selectedLabel
-  ? `/images/${selectedLabel
-      .toLowerCase()
-      .replace(/['’\s]+/g, "")}.svg`
-  : "/images/body.svg";
-
 
   return (
     <section
@@ -96,7 +159,7 @@ export default function Body() {
           />
         </div>
 
-        {/* BODY IMAGE (with animation) */}
+        {/* BODY IMAGE (animated) */}
         <AnimatePresence mode="wait">
           <motion.div
             key={bodyImagePath}
@@ -116,77 +179,28 @@ export default function Body() {
         </AnimatePresence>
 
         {/* RIGHT SIDE LABELS */}
-        {[
-          { text: "Neurology", top: "85px", left: "935px", width: "110px" },
-          {
-            text: "Cardiovascular",
-            top: "160px",
-            left: "990px",
-            width: "147px",
-          },
-          { text: "Dermatology", top: "243px", left: "980px", width: "130px" },
-          {
-            text: "Radiation Oncology",
-            top: "325px",
-            left: "960px",
-            width: "181px",
-          },
-          {
-            text: "Skeletal System",
-            top: "407px",
-            left: "975px",
-            width: "154px",
-          },
-          {
-            text: "Women’s Health",
-            top: "475px",
-            left: "960px",
-            width: "155px",
-          },
-          {
-            text: "Emerging Viruses",
-            top: "550px",
-            left: "950px",
-            width: "167px",
-          },
-          { text: "Genetics", top: "615px", left: "920px", width: "100px" },
-        ].map((label, idx) => (
+        {rightSideLabels.map((label, idx) => (
           <Label
             key={`right-${idx}`}
             label={label}
             isRightSide={true}
             onClickLabel={handleLabelClick}
+            isActive={selectedLabel === label.text}
           />
         ))}
 
         {/* LEFT SIDE LABELS */}
-        {[
-          {
-            text: "Endocrinology",
-            top: "120px",
-            left: "600px",
-            width: "142px",
-          },
-          {
-            text: "Gastroenterology",
-            top: "185px",
-            left: "530px",
-            width: "166px",
-          },
-          { text: "Geriatrics", top: "265px", left: "600px", width: "106px" },
-          { text: "Hepatology", top: "340px", left: "555px", width: "120px" },
-          { text: "Inflammation", top: "420px", left: "560px", width: "132px" },
-          { text: "Urology", top: "500px", left: "615px", width: "91px" },
-          { text: "Virology", top: "580px", left: "630px", width: "91px" },
-        ].map((label, idx) => (
+        {leftSideLabels.map((label, idx) => (
           <Label
             key={`left-${idx}`}
             label={label}
             isRightSide={false}
             onClickLabel={handleLabelClick}
+            isActive={selectedLabel === label.text}
           />
         ))}
 
+        {/* CHAT BUBBLE + EXPLORE BUTTON (unchanged) */}
         <motion.div
           key={visible ? "visible" : "hidden"}
           className="absolute top-[20px] -left-20 chat-bubble"
@@ -204,66 +218,68 @@ export default function Body() {
               height={31}
               className="object-contain"
             />
-
-            <div className="w-[375px] h-[75px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] leading-[1.5] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
+            <div className="w-[375px] h-[75px] rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
               Does Sage Research exclusively focus on ophthalmology within its
               CRO Services?
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ x: 200, opacity: 0 }}
-            animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
-            transition={{ duration: 1, ease: "easeOut", delay: 1 }}
-            className="relative flex items-start justify-between w-[451px] h-[89px] left-[95px] top-[20px]"
-          >
-            <div className="w-[411px] h-[89px] rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-[#003F6E] text-white px-5 py-4 flex items-center text-[13px] leading-[20px] font-poppins font-normal">
-              <p>
-                In addition to our recognized expertise in ophthalmology, Sage
-                Research offers comprehensive CRO services across a{" "}
-                <span className="font-semibold">
-                  broad range of therapeutic areas.
-                </span>
-              </p>
-            </div>
+          {/* BLUE BUBBLES */}
+          {[1, 2].map((n, i) => (
+            <motion.div
+              key={i}
+              initial={{ x: 200, opacity: 0 }}
+              animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
+              transition={{
+                duration: 1,
+                ease: "easeOut",
+                delay: n,
+              }}
+              className={`relative flex items-start justify-between ${
+                i === 0
+                  ? "w-[451px] h-[89px] left-[95px] top-[20px]"
+                  : "w-[400px] h-[75px] left-[125px] top-[35px]"
+              }`}
+            >
+              <div
+                className={`rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-[#003F6E] text-white ${
+                  i === 0 ? "w-[411px] h-[89px]" : "w-[380px] h-[75px]"
+                } px-5 py-4 flex items-center text-[13px] leading-[20px] font-poppins`}
+              >
+                <p>
+                  {i === 0 ? (
+                    <>
+                      In addition to our recognized expertise in ophthalmology,
+                      Sage Research offers comprehensive CRO services across a{" "}
+                      <span className="font-semibold">
+                        broad range of therapeutic areas.
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      The eyes are a unique, non-invasive window into systemic
+                      health, capable of revealing early signs of{" "}
+                      <span className="font-semibold">
+                        numerous diseases and disorders.
+                      </span>
+                    </>
+                  )}
+                </p>
+              </div>
 
-            <div className="absolute right-[1px] top-[5px] flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white">
-              <Image
-                src={blueIconPath}
-                alt="Blue globe icon"
-                width={29}
-                height={29}
-                className="object-contain"
-              />
-            </div>
-          </motion.div>
+              <div className="absolute right-[-20px] top-[5px] flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white">
+                <Image
+                  src={blueIconPath}
+                  alt="Blue globe icon"
+                  width={29}
+                  height={29}
+                  className="object-contain"
+                />
+              </div>
+            </motion.div>
+          ))}
 
-          <motion.div
-            initial={{ x: 200, opacity: 0 }}
-            animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
-            transition={{ duration: 1, ease: "easeOut", delay: 2 }}
-            className="relative flex items-start justify-between w-[400px] h-[75px] left-[125px] top-[35px]"
-          >
-            <div className="w-[380px] h-[75px] rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-[#003F6E] text-white px-5 py-4 flex items-center text-[13px] leading-[20px] font-poppins font-normal">
-              <p>
-                The eyes are a unique, non-invasive window into systemic health,
-                capable of revealing early signs of{" "}
-                <span className="font-semibold">
-                  numerous diseases and disorders.
-                </span>
-              </p>
-            </div>
-            <div className="absolute right-[-20px] top-[5px] flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white">
-              <Image
-                src={blueIconPath}
-                alt="Blue globe icon"
-                width={29}
-                height={29}
-                className="object-contain"
-              />
-            </div>
-          </motion.div>
-
+          {/* EXPLORE BUTTON */}
           <motion.button
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
