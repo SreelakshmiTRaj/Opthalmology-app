@@ -28,17 +28,19 @@ export default function Hero() {
     return diff;
   };
 
-  const handleClickTo = (label) => {
-    const angle = labelAngles[label];
-    if (angle === undefined) return;
+    const handleClickTo = (label) => {
+      const angle = labelAngles[label];
+      if (angle === undefined) return;
 
-    setActiveLabel(label);
-    setRotation((current) => {
-      const curNorm = ((current % 360) + 360) % 360;
-      const delta = shortestDelta(curNorm, -angle);
-      return current + delta;
-    });
-  };
+      setActiveLabel(label);
+      setRotation((current) => {
+        const curNorm = ((current % 360) + 360) % 360;
+        const delta = shortestDelta(curNorm, -angle);
+        return current + delta;
+      });
+    };
+
+  
 
   const norm = (angle) => ((angle % 360) + 360) % 360;
 
