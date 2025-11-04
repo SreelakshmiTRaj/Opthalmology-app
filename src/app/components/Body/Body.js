@@ -1,14 +1,36 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export default function Body() {
   const bodyPath = "/images/body.svg";
   const lightPath = "/images/bodyLighting.svg";
   const personIconPath = "/images/personIcon.svg";
 
+  const [visible, setVisible] = useState(true);
+
+  // Function to handle section clicks
+  const handleSectionClick = (e) => {
+    // Prevent bubble toggle when clicking the body or label elements
+    if (
+      e.target.closest(".body-image") ||
+      e.target.closest(".label") ||
+      e.target.closest(".chat-bubble")
+    ) {
+      return;
+    }
+
+    // Trigger the hide-then-show sequence
+    setVisible(false);
+    setTimeout(() => setVisible(true), 500); // Wait before reappearing
+  };
+
   return (
-    <section className="relative w-full bg-[#0b1626]/90 text-white py-12 px-6 flex flex-col items-center overflow-hidden">
+    <section
+      className="relative w-full bg-[#0b1626]/90 text-white py-12 px-6 flex flex-col items-center overflow-hidden"
+      onClick={handleSectionClick}
+    >
       {/* HEADING */}
       <h2 className="text-[36px] leading-[45px] font-bold text-center uppercase max-w-[784px] mb-10">
         IT IS OFTEN SAID THAT THE
@@ -30,7 +52,7 @@ export default function Body() {
         </div>
 
         {/* BODY IMAGE */}
-        <div className="absolute w-[380px] h-[850px] top-[-80px] left-[650px]">
+        <div className="absolute w-[380px] h-[850px] top-[-80px] left-[650px] body-image">
           <Image
             src={bodyPath}
             alt="Human body"
@@ -52,7 +74,7 @@ export default function Body() {
         ].map((label, idx) => (
           <div
             key={`right-${idx}`}
-            className={`absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap`}
+            className="absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label"
             style={{
               top: `${label.top}px`,
               left: `${label.left + 650}px`,
@@ -78,7 +100,7 @@ export default function Body() {
         ].map((label, idx) => (
           <div
             key={`left-${idx}`}
-            className={`absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap`}
+            className="absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label"
             style={{
               top: `${label.top}px`,
               left: `${label.left + 650}px`,
@@ -94,10 +116,11 @@ export default function Body() {
 
         {/* LEFT SIDE CHAT BUBBLE */}
         <motion.div
+          key={visible ? "visible" : "hidden"}
           initial={{ x: -200, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="absolute flex items-start gap-2 top-[20px] -left-20 w-[372px] h-[70px]"
+          animate={{ x: visible ? 0 : -200, opacity: visible ? 1 : 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="absolute flex items-start gap-2 top-[20px] -left-20 w-[372px] h-[70px] chat-bubble"
         >
           <Image
             src={personIconPath}
@@ -107,7 +130,7 @@ export default function Body() {
             className="object-contain mt-[4px]"
           />
 
-          <div className="w-[332px] h-[75px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] leading-[1.5] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
+          <div className="w-[375px] h-[75px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] leading-[1.5] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
             Does Sage Research exclusively focus on ophthalmology within its CRO
             Services?
           </div>
