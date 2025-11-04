@@ -3,6 +3,44 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+const Label = ({ label, isRightSide }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const baseBackground = isRightSide
+    ? "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)"
+    : "linear-gradient(90deg, rgba(255,255,255,0) 50%, rgba(255,255,255,0.2) 100%)";
+
+  const hoverBackground = isRightSide
+    ? "linear-gradient(90deg, rgba(58, 173, 237, 0.5) 0%, rgba(58, 173, 237, 0) 75%)"
+    : "linear-gradient(-90deg, rgba(58, 173, 237, 0.5) 0%, rgba(58, 173, 237, 0) 75%)";
+
+  return (
+    <motion.div 
+      className={`absolute flex items-center justify-center text-sm font-bold rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label transition-all duration-300 ease-in-out cursor-pointer
+        ${
+          isHovered
+            ? "text-[#3AADED] border border-[#3AADED] " 
+            : "text-white border border-transparent"
+        }
+      `}
+      style={{
+        top: label.top,
+        left: label.left,
+        width: label.width,
+        background: isHovered ? hoverBackground : baseBackground,
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      animate={{
+        x: isHovered ? (isRightSide ? -5 : 5) : 0, 
+      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      {label.text}
+    </motion.div>
+  );
+};
+
 export default function Body() {
   const bodyPath = "/images/body.svg";
   const lightPath = "/images/bodyLighting.svg";
@@ -11,7 +49,6 @@ export default function Body() {
 
   const [visible, setVisible] = useState(true);
 
-  // Function to handle section clicks
   const handleSectionClick = (e) => {
     if (
       e.target.closest(".body-image") ||
@@ -30,7 +67,6 @@ export default function Body() {
       className="relative w-full bg-[#0b1626]/90 text-white py-12 px-6 flex flex-col items-center overflow-hidden"
       onClick={handleSectionClick}
     >
-      {/* HEADING */}
       <h2 className="text-[36px] leading-[45px] font-bold text-center uppercase max-w-[784px] mb-10">
         IT IS OFTEN SAID THAT THE
         <br />
@@ -38,9 +74,7 @@ export default function Body() {
         <span className="whitespace-nowrap">SOUL.</span>
       </h2>
 
-      {/* BODY CONTAINER */}
       <div className="relative w-[1101px] h-[745px]">
-        {/* LIGHT UNDER BODY */}
         <div className="absolute w-[500px] h-[520px] top-[200px] left-[590px] opacity-80">
           <Image
             src={lightPath}
@@ -50,7 +84,6 @@ export default function Body() {
           />
         </div>
 
-        {/* BODY IMAGE */}
         <div className="absolute w-[380px] h-[850px] top-[-80px] left-[650px] body-image">
           <Image
             src={bodyPath}
@@ -60,58 +93,66 @@ export default function Body() {
           />
         </div>
 
-        {/* RIGHT SIDE LABELS */}
         {[
-          {text: "Neurology", top: "85px", left: "935px", width: "110px" },
-          {text: "Cardiovascular",top: "160px",left: "990px",width: "147px",},
-          {text: "Dermatology", top: "243px", left: "980px", width: "130px" },
-          {text: "Radiation Oncology",top: "325px",left: "960px",width: "181px",},
-          {text: "Skeletal System",top: "407px",left: "975px",width: "154px",},
-          {text: "Women’s Health",top: "475px",left: "960px",width: "155px",},
-          {text: "Emerging Viruses",top: "550px",left: "950px",width: "167px",},
-          {text: "Genetics", top: "615px", left: "920px", width: "100px" },
+          { text: "Neurology", top: "85px", left: "935px", width: "110px" },
+          {
+            text: "Cardiovascular",
+            top: "160px",
+            left: "990px",
+            width: "147px",
+          },
+          { text: "Dermatology", top: "243px", left: "980px", width: "130px" },
+          {
+            text: "Radiation Oncology",
+            top: "325px",
+            left: "960px",
+            width: "181px",
+          },
+          {
+            text: "Skeletal System",
+            top: "407px",
+            left: "975px",
+            width: "154px",
+          },
+          {
+            text: "Women’s Health",
+            top: "475px",
+            left: "960px",
+            width: "155px",
+          },
+          {
+            text: "Emerging Viruses",
+            top: "550px",
+            left: "950px",
+            width: "167px",
+          },
+          { text: "Genetics", top: "615px", left: "920px", width: "100px" },
         ].map((label, idx) => (
-          <div
-            key={`right-${idx}`}
-            className={`absolute flex items-center justify-center text-sm font-bold text-white rounded-[24px] py-[10px] px-[15px] whitespace-nowrap`}
-            style={{
-              top: label.top,
-              left: label.left,
-              width: label.width,
-              background:
-                "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)",
-            }}
-          >
-            {label.text}
-          </div>
+          <Label key={`right-${idx}`} label={label} isRightSide={true} />
         ))}
 
-        {/* LEFT SIDE LABELS */}
         {[
-          {text: "Endocrinology",top: "120px",left: "600px",width: "142px",},
-          {text: "Gastroenterology", top: "185px",left: "530px", width: "166px",},
+          {
+            text: "Endocrinology",
+            top: "120px",
+            left: "600px",
+            width: "142px",
+          },
+          {
+            text: "Gastroenterology",
+            top: "185px",
+            left: "530px",
+            width: "166px",
+          },
           { text: "Geriatrics", top: "265px", left: "600px", width: "106px" },
           { text: "Hepatology", top: "340px", left: "555px", width: "120px" },
           { text: "Inflammation", top: "420px", left: "560px", width: "132px" },
           { text: "Urology", top: "500px", left: "615px", width: "91px" },
           { text: "Virology", top: "580px", left: "630px", width: "91px" },
         ].map((label, idx) => (
-          <div
-            key={`left-${idx}`}
-            className="absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap"
-            style={{
-              top: label.top,
-              left: label.left,
-              width: label.width,
-              background:
-                "linear-gradient(90deg, rgba(255,255,255,0) 50%, rgba(255,255,255,0.2) 100%)",
-            }}
-          >
-            {label.text}
-          </div>
+          <Label key={`left-${idx}`} label={label} isRightSide={false} />
         ))}
 
-        {/* CHAT BUBBLES */}
         <motion.div
           key={visible ? "visible" : "hidden"}
           className="absolute top-[20px] -left-20 chat-bubble"
