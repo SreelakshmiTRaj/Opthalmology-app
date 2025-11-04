@@ -1,12 +1,14 @@
 "use client";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function Body() {
   const bodyPath = "/images/body.svg";
   const lightPath = "/images/bodyLighting.svg";
+  const personIconPath = "/images/personIcon.svg";
 
   return (
-    <section className="relative w-full bg-[#0b1626]/90 text-white py-12 px-6 flex flex-col items-center">
+    <section className="relative w-full bg-[#0b1626]/90 text-white py-12 px-6 flex flex-col items-center overflow-hidden">
       {/* HEADING */}
       <h2 className="text-[36px] leading-[45px] font-bold text-center uppercase max-w-[784px] mb-10">
         IT IS OFTEN SAID THAT THE
@@ -18,16 +20,7 @@ export default function Body() {
       {/* BODY CONTAINER */}
       <div className="relative w-[1101px] h-[745px]">
         {/* LIGHT UNDER BODY */}
-        <div
-          className="absolute"
-          style={{
-            width: "500px",
-            height: "520px",
-            top: "200px",
-            left: "590px", // aligned with body
-            opacity: 0.8,
-          }}
-        >
+        <div className="absolute w-[500px] h-[520px] top-[200px] left-[590px] opacity-80">
           <Image
             src={lightPath}
             alt="Body lighting"
@@ -37,15 +30,7 @@ export default function Body() {
         </div>
 
         {/* BODY IMAGE */}
-        <div
-          className="absolute"
-          style={{
-            width: "380px",
-            height: "850px",
-            top: "-80px",
-            left: "650px", // aligned with heading
-          }}
-        >
+        <div className="absolute w-[380px] h-[850px] top-[-80px] left-[650px]">
           <Image
             src={bodyPath}
             alt="Human body"
@@ -67,20 +52,14 @@ export default function Body() {
         ].map((label, idx) => (
           <div
             key={`right-${idx}`}
-            className="absolute text-sm font-bold text-white"
+            className={`absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap`}
             style={{
               top: `${label.top}px`,
               left: `${label.left + 650}px`,
               width: `${label.width}px`,
               height: "32px",
-              borderRadius: "24px",
-              padding: "10px 15px",
               background:
                 "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              whiteSpace: "nowrap",
             }}
           >
             {label.text}
@@ -99,26 +78,40 @@ export default function Body() {
         ].map((label, idx) => (
           <div
             key={`left-${idx}`}
-            className="absolute text-sm font-bold text-white"
+            className={`absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap`}
             style={{
               top: `${label.top}px`,
               left: `${label.left + 650}px`,
               width: `${label.width}px`,
               height: "32px",
-              borderRadius: "24px",
-              padding: "10px 15px",
               background:
                 "linear-gradient(90deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.2) 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              whiteSpace: "nowrap",
-              opacity: 1,
             }}
           >
             {label.text}
           </div>
         ))}
+
+        {/* LEFT SIDE CHAT BUBBLE */}
+        <motion.div
+          initial={{ x: -200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="absolute flex items-start gap-2 top-[20px] -left-20 w-[372px] h-[70px]"
+        >
+          <Image
+            src={personIconPath}
+            alt="Person icon"
+            width={31}
+            height={31}
+            className="object-contain mt-[4px]"
+          />
+
+          <div className="w-[332px] h-[75px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] leading-[1.5] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
+            Does Sage Research exclusively focus on ophthalmology within its CRO
+            Services?
+          </div>
+        </motion.div>
       </div>
     </section>
   );
