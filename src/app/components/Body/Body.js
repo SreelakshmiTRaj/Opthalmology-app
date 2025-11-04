@@ -151,7 +151,6 @@ export default function Body() {
           key={visible ? "visible" : "hidden"}
           className="absolute top-[20px] -left-20 chat-bubble"
         >
-          {/* WHITE QUESTION */}
           <motion.div
             initial={{ x: -200, opacity: 0 }}
             animate={{ x: visible ? 0 : -200, opacity: visible ? 1 : 0 }}
@@ -163,15 +162,15 @@ export default function Body() {
               alt="Person icon"
               width={31}
               height={31}
-              className="object-contain mt-[4px]"
+              className="object-contain"
             />
+
             <div className="w-[375px] h-[75px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] leading-[1.5] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
               Does Sage Research exclusively focus on ophthalmology within its
               CRO Services?
             </div>
           </motion.div>
 
-          {/* BLUE BUBBLE 1 */}
           <motion.div
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
@@ -187,16 +186,18 @@ export default function Body() {
                 </span>
               </p>
             </div>
-            <Image
-              src={blueIconPath}
-              alt="Blue globe icon"
-              width={29}
-              height={29}
-              className="absolute right-[1px] top-[5px]"
-            />
+
+            <div className="absolute right-[1px] top-[5px] flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white">
+              <Image
+                src={blueIconPath}
+                alt="Blue globe icon"
+                width={29}
+                height={29}
+                className="object-contain"
+              />
+            </div>
           </motion.div>
 
-          {/* BLUE BUBBLE 2 */}
           <motion.div
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
@@ -212,16 +213,17 @@ export default function Body() {
                 </span>
               </p>
             </div>
-            <Image
-              src={blueIconPath}
-              alt="Blue globe icon"
-              width={29}
-              height={29}
-              className="absolute right-[-22px] top-[3px]"
-            />
+            <div className="absolute right-[-20px] top-[5px] flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white">
+              <Image
+                src={blueIconPath}
+                alt="Blue globe icon"
+                width={29}
+                height={29}
+                className="object-contain"
+              />
+            </div>
           </motion.div>
 
-          {/* EXPLORE BUTTON */}
           <motion.button
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
