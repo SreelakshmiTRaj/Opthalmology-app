@@ -23,8 +23,8 @@ export default function Body() {
           style={{
             width: "500px",
             height: "520px",
-            top: "200px", // moved up from 280px
-            left: "640px",
+            top: "200px",
+            left: "590px", // aligned with body
             opacity: 0.8,
           }}
         >
@@ -42,8 +42,8 @@ export default function Body() {
           style={{
             width: "380px",
             height: "850px",
-            top: "-80px", // moved up from 0px
-            left: "700px",
+            top: "-80px",
+            left: "650px", // aligned with heading
           }}
         >
           <Image
@@ -56,27 +56,59 @@ export default function Body() {
 
         {/* RIGHT SIDE LABELS */}
         {[
-          { text: "Neurology", top: 50, left: 234, width: 110 },
-          { text: "Cardiovascular", top: 134, left: 274, width: 147 },
-          { text: "Dermatology", top: 218, left: 261.5, width: 130 },
-          { text: "Radiation Oncology", top: 302, left: 278.5, width: 181 },
-          { text: "Skeletal System", top: 386, left: 292, width: 154 },
-          { text: "Women’s Health", top: 470, left: 271.5, width: 155 },
-          { text: "Emerging Viruses", top: 554, left: 274, width: 167 },
-          { text: "Genetics", top: 627, left: 234, width: 100 },
+          { text: "Neurology", top: 85, left: 265, width: 110 },
+          { text: "Cardiovascular", top: 165, left: 300, width: 147 },
+          { text: "Dermatology", top: 238, left: 261.5, width: 130 },
+          { text: "Radiation Oncology", top: 322, left: 278.5, width: 181 },
+          { text: "Skeletal System", top: 406, left: 292, width: 154 },
+          { text: "Women’s Health", top: 490, left: 271.5, width: 155 },
+          { text: "Emerging Viruses", top: 574, left: 274, width: 167 },
+          { text: "Genetics", top: 647, left: 234, width: 100 },
         ].map((label, idx) => (
           <div
-            key={idx}
+            key={`right-${idx}`}
             className="absolute text-sm font-medium text-white"
             style={{
               top: `${label.top}px`,
-              left: `${label.left + 700}px`,
+              left: `${label.left + 650}px`,
               width: `${label.width}px`,
               height: "32px",
               borderRadius: "24px",
               padding: "10px 15px",
               background:
                 "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {label.text}
+          </div>
+        ))}
+
+        {/* LEFT SIDE LABELS */}
+        {[
+          { text: "Endocrinology", top: 120, left: -50, width: 142 },
+          { text: "Gastroenterology", top: 185, left: -120, width: 166 },
+          { text: "Geriatrics", top: 265, left: -50, width: 106 },
+          { text: "Hepatology", top: 340, left: -95, width: 120 },
+          { text: "Inflammation", top: 420, left: -90, width: 132 },
+          { text: "Urology", top: 500, left: -35, width: 91 },
+          { text: "Virology", top: 580, left: -20, width: 91 },
+        ].map((label, idx) => (
+          <div
+            key={`left-${idx}`}
+            className="absolute text-sm font-bold text-white"
+            style={{
+              top: `${label.top}px`,
+              left: `${label.left + 650}px`,
+              width: `${label.width}px`,
+              height: "32px",
+              borderRadius: "24px",
+              padding: "10px 15px",
+              background:
+                "linear-gradient(90deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.2) 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
