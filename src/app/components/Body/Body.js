@@ -56,18 +56,18 @@ export default function Body() {
 
         {/* RIGHT SIDE LABELS */}
         {[
-          { text: "Neurology", top: 85, left: 265, width: 110 },
-          { text: "Cardiovascular", top: 165, left: 300, width: 147 },
-          { text: "Dermatology", top: 238, left: 261.5, width: 130 },
-          { text: "Radiation Oncology", top: 322, left: 278.5, width: 181 },
-          { text: "Skeletal System", top: 406, left: 292, width: 154 },
-          { text: "Women’s Health", top: 490, left: 271.5, width: 155 },
-          { text: "Emerging Viruses", top: 574, left: 274, width: 167 },
-          { text: "Genetics", top: 647, left: 234, width: 100 },
+          { text: "Neurology", top: 85, left: 285, width: 110 },
+          { text: "Cardiovascular", top: 160, left: 340, width: 147 },
+          { text: "Dermatology", top: 243, left: 330, width: 130 },
+          { text: "Radiation Oncology", top: 325, left: 310, width: 181 },
+          { text: "Skeletal System", top: 407, left: 325, width: 154 },
+          { text: "Women’s Health", top: 475, left: 310, width: 155 },
+          { text: "Emerging Viruses", top: 550, left: 300, width: 167 },
+          { text: "Genetics", top: 615, left: 270, width: 100 },
         ].map((label, idx) => (
           <div
             key={`right-${idx}`}
-            className="absolute text-sm font-medium text-white"
+            className="absolute text-sm font-bold text-white"
             style={{
               top: `${label.top}px`,
               left: `${label.left + 650}px`,
