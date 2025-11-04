@@ -7,12 +7,12 @@ export default function Body() {
   const bodyPath = "/images/body.svg";
   const lightPath = "/images/bodyLighting.svg";
   const personIconPath = "/images/personIcon.svg";
+  const blueIconPath = "/images/blueIcon.svg";
 
   const [visible, setVisible] = useState(true);
 
   // Function to handle section clicks
   const handleSectionClick = (e) => {
-    // Prevent bubble toggle when clicking the body or label elements
     if (
       e.target.closest(".body-image") ||
       e.target.closest(".label") ||
@@ -21,9 +21,8 @@ export default function Body() {
       return;
     }
 
-    // Trigger the hide-then-show sequence
     setVisible(false);
-    setTimeout(() => setVisible(true), 500); // Wait before reappearing
+    setTimeout(() => setVisible(true), 500);
   };
 
   return (
@@ -63,23 +62,47 @@ export default function Body() {
 
         {/* RIGHT SIDE LABELS */}
         {[
-          { text: "Neurology", top: 85, left: 285, width: 110 },
-          { text: "Cardiovascular", top: 160, left: 340, width: 147 },
-          { text: "Dermatology", top: 243, left: 330, width: 130 },
-          { text: "Radiation Oncology", top: 325, left: 310, width: 181 },
-          { text: "Skeletal System", top: 407, left: 325, width: 154 },
-          { text: "Women’s Health", top: 475, left: 310, width: 155 },
-          { text: "Emerging Viruses", top: 550, left: 300, width: 167 },
-          { text: "Genetics", top: 615, left: 270, width: 100 },
+          { text: "Neurology", top: "85px", left: "935px", width: "110px" },
+          {
+            text: "Cardiovascular",
+            top: "160px",
+            left: "990px",
+            width: "147px",
+          },
+          { text: "Dermatology", top: "243px", left: "980px", width: "130px" },
+          {
+            text: "Radiation Oncology",
+            top: "325px",
+            left: "960px",
+            width: "181px",
+          },
+          {
+            text: "Skeletal System",
+            top: "407px",
+            left: "975px",
+            width: "154px",
+          },
+          {
+            text: "Women’s Health",
+            top: "475px",
+            left: "960px",
+            width: "155px",
+          },
+          {
+            text: "Emerging Viruses",
+            top: "550px",
+            left: "950px",
+            width: "167px",
+          },
+          { text: "Genetics", top: "615px", left: "920px", width: "100px" },
         ].map((label, idx) => (
           <div
             key={`right-${idx}`}
-            className="absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label"
+            className={`absolute flex items-center justify-center text-sm font-bold text-white rounded-[24px] py-[10px] px-[15px] whitespace-nowrap`}
             style={{
-              top: `${label.top}px`,
-              left: `${label.left + 650}px`,
-              width: `${label.width}px`,
-              height: "32px",
+              top: label.top,
+              left: label.left,
+              width: label.width,
               background:
                 "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)",
             }}
@@ -90,50 +113,124 @@ export default function Body() {
 
         {/* LEFT SIDE LABELS */}
         {[
-          { text: "Endocrinology", top: 120, left: -50, width: 142 },
-          { text: "Gastroenterology", top: 185, left: -120, width: 166 },
-          { text: "Geriatrics", top: 265, left: -50, width: 106 },
-          { text: "Hepatology", top: 340, left: -95, width: 120 },
-          { text: "Inflammation", top: 420, left: -90, width: 132 },
-          { text: "Urology", top: 500, left: -35, width: 91 },
-          { text: "Virology", top: 580, left: -20, width: 91 },
+          {
+            text: "Endocrinology",
+            top: "120px",
+            left: "600px",
+            width: "142px",
+          },
+          {
+            text: "Gastroenterology",
+            top: "185px",
+            left: "530px",
+            width: "166px",
+          },
+          { text: "Geriatrics", top: "265px", left: "600px", width: "106px" },
+          { text: "Hepatology", top: "340px", left: "555px", width: "120px" },
+          { text: "Inflammation", top: "420px", left: "560px", width: "132px" },
+          { text: "Urology", top: "500px", left: "615px", width: "91px" },
+          { text: "Virology", top: "580px", left: "630px", width: "91px" },
         ].map((label, idx) => (
           <div
             key={`left-${idx}`}
-            className="absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label"
+            className="absolute text-sm font-bold text-white flex items-center justify-center rounded-[24px] py-[10px] px-[15px] whitespace-nowrap"
             style={{
-              top: `${label.top}px`,
-              left: `${label.left + 650}px`,
-              width: `${label.width}px`,
-              height: "32px",
+              top: label.top,
+              left: label.left,
+              width: label.width,
               background:
-                "linear-gradient(90deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.2) 100%)",
+                "linear-gradient(90deg, rgba(255,255,255,0) 50%, rgba(255,255,255,0.2) 100%)",
             }}
           >
             {label.text}
           </div>
         ))}
 
-        {/* LEFT SIDE CHAT BUBBLE */}
+        {/* CHAT BUBBLES */}
         <motion.div
           key={visible ? "visible" : "hidden"}
-          initial={{ x: -200, opacity: 0 }}
-          animate={{ x: visible ? 0 : -200, opacity: visible ? 1 : 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="absolute flex items-start gap-2 top-[20px] -left-20 w-[372px] h-[70px] chat-bubble"
+          className="absolute top-[20px] -left-20 chat-bubble"
         >
-          <Image
-            src={personIconPath}
-            alt="Person icon"
-            width={31}
-            height={31}
-            className="object-contain mt-[4px]"
-          />
+          {/* WHITE QUESTION */}
+          <motion.div
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: visible ? 0 : -200, opacity: visible ? 1 : 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="flex items-start gap-2 w-[372px] h-[70px]"
+          >
+            <Image
+              src={personIconPath}
+              alt="Person icon"
+              width={31}
+              height={31}
+              className="object-contain mt-[4px]"
+            />
+            <div className="w-[375px] h-[75px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] leading-[1.5] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
+              Does Sage Research exclusively focus on ophthalmology within its
+              CRO Services?
+            </div>
+          </motion.div>
 
-          <div className="w-[375px] h-[75px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] leading-[1.5] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
-            Does Sage Research exclusively focus on ophthalmology within its CRO
-            Services?
-          </div>
+          {/* BLUE BUBBLE 1 */}
+          <motion.div
+            initial={{ x: 200, opacity: 0 }}
+            animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
+            transition={{ duration: 1, ease: "easeOut", delay: 1 }}
+            className="relative flex items-start justify-between w-[451px] h-[89px] left-[95px] top-[20px]"
+          >
+            <div className="w-[411px] h-[89px] rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-[#003F6E] text-white px-5 py-4 flex items-center text-[13px] leading-[20px] font-poppins font-normal">
+              <p>
+                In addition to our recognized expertise in ophthalmology, Sage
+                Research offers comprehensive CRO services across a{" "}
+                <span className="font-semibold">
+                  broad range of therapeutic areas.
+                </span>
+              </p>
+            </div>
+            <Image
+              src={blueIconPath}
+              alt="Blue globe icon"
+              width={29}
+              height={29}
+              className="absolute right-[1px] top-[5px]"
+            />
+          </motion.div>
+
+          {/* BLUE BUBBLE 2 */}
+          <motion.div
+            initial={{ x: 200, opacity: 0 }}
+            animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
+            transition={{ duration: 1, ease: "easeOut", delay: 2 }}
+            className="relative flex items-start justify-between w-[400px] h-[75px] left-[125px] top-[35px]"
+          >
+            <div className="w-[380px] h-[75px] rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-[#003F6E] text-white px-5 py-4 flex items-center text-[13px] leading-[20px] font-poppins font-normal">
+              <p>
+                The eyes are a unique, non-invasive window into systemic health,
+                capable of revealing early signs of{" "}
+                <span className="font-semibold">
+                  numerous diseases and disorders.
+                </span>
+              </p>
+            </div>
+            <Image
+              src={blueIconPath}
+              alt="Blue globe icon"
+              width={29}
+              height={29}
+              className="absolute right-[-22px] top-[3px]"
+            />
+          </motion.div>
+
+          {/* EXPLORE BUTTON */}
+          <motion.button
+            initial={{ x: 200, opacity: 0 }}
+            animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
+            transition={{ duration: 1, delay: 2.8, ease: "easeOut" }}
+            className="absolute flex items-center justify-center gap-2 text-[#3AADED] text-[15px] font-medium w-[140px] h-[50px] rounded-[34px] border border-[#0A345F] bg-gradient-to-r from-[rgba(255,255,255,0.1)] to-[rgba(255,255,255,0)] left-[366px] top-[290px]"
+          >
+            Explore
+            <span className="text-[#3AADED] text-lg">→</span>
+          </motion.button>
         </motion.div>
       </div>
     </section>
