@@ -98,7 +98,7 @@ export default function Header() {
           <AnimatePresence>
             {navHover && (
               <motion.div
-                key={navHover} 
+                key={navHover}
                 className="absolute bottom-[2px] h-[2.5px] bg-sky-400 rounded-full"
                 initial={{ opacity: 0, scaleX: 0.6 }}
                 animate={{
@@ -114,20 +114,56 @@ export default function Header() {
                 transition={{
                   opacity: { duration: 0.2, ease: "easeOut" },
                   scaleX: { duration: 0.2, ease: "easeOut" },
-                  x: { duration: 0 }, 
+                  x: { duration: 0 },
                 }}
               />
             )}
           </AnimatePresence>
         </nav>
 
-        <button className="bg-[#3AADED] text-white font-semibold py-3 px-4 rounded-lg transition duration-150 text-xs sm:text-sm whitespace-nowrap">
-          Become an Investigator
-        </button>
+        {/* Become an Investigator Button */}
+        <div className="relative group flex flex-col items-center">
+          <button className="bg-[#3AADED] text-white font-semibold py-3 px-4 rounded-lg transition duration-150 text-xs sm:text-sm whitespace-nowrap">
+            Become an Investigator
+          </button>
 
-        <button className="bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 px-4 rounded-lg transition duration-150 text-xs sm:text-sm whitespace-nowrap border border-white">
-          Become Study Participant
-        </button>
+          {/* Mover bar under the button */}
+          <motion.div
+            className="absolute bottom-0 h-[2.5px] bg-white rounded-full"
+            initial={{ x: "-100%", opacity: 0 }}
+            whileHover={{ x: "calc(50% - 12px)", opacity: 1 }}
+            transition={{
+              x: { duration: 0.4, ease: "easeOut" },
+              opacity: { duration: 0.2, ease: "easeOut" },
+            }}
+            style={{
+              width: 24,
+              left: 0,
+            }}
+          />
+        </div>
+
+        {/* Become Study Participant Button */}
+        <div className="relative group flex flex-col items-center">
+          <button className="bg-white text-gray-900 font-semibold py-3 px-4 rounded-lg transition duration-150 text-xs sm:text-sm whitespace-nowrap border border-white hover:bg-gray-100">
+            Become Study Participant
+          </button>
+
+          {/* Mover bar under the button */}
+          <motion.div
+            className="absolute bottom-0 h-[2.5px] bg-sky-400 rounded-full"
+            initial={{ x: "-100%", opacity: 0 }}
+            whileHover={{ x: "calc(50% - 12px)", opacity: 1 }}
+            transition={{
+              x: { duration: 0.4, ease: "easeOut" },
+              opacity: { duration: 0.2, ease: "easeOut" },
+            }}
+            style={{
+              width: 24,
+              left: 0,
+            }}
+          />
+        </div>
 
         <div
           className="relative w-5 h-5 sm:w-14 sm:h-14 flex items-center justify-center 

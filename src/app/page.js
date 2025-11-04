@@ -1,5 +1,6 @@
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
+import Body from "./components/Body/Body";
 import Image from "next/image";
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <div className="relative z-10 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <Header />
         <Hero />
+        <Body />
       </div>
     </section>
   );
