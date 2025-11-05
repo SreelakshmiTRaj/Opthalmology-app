@@ -14,7 +14,7 @@ export default function BodyDescriptionBox({ selectedLabel }) {
       "The precise delivery techniques, tumor response, encompassing various techniques and treatments to treat cancer.",
     "Skeletal System":
       "The skeletal system, osteology, bones and bone health or conditions.",
-    "Women's Health":
+    "Women’s Health":
       "Female-specific health conditions, including reproductive health, and various female-specific treatments and therapies.",
     "Emerging Viruses": "Novel or newly recognized viral infections in humans.",
     Genetics:
