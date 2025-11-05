@@ -22,13 +22,10 @@ export default function Home() {
       <div className="relative z-10 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <Header />
         <Hero />
-          {/* Blurred overlay behind Body */}
-          <div className="absolute inset-0 backdrop-blur-[8px] bg-[#0b1626]/40 z-0 rounded-t-3xl"></div>
-
-          {/* Actual Body content */}
-          <div className="relative z-10">
-            <Body />
-          </div>
+        <div className="absolute inset-0 backdrop-blur-[8px] bg-[#0b1626]/40 z-0 rounded-t-3xl"></div>
+        <div className="relative z-10">
+          <Body />
+        </div>
       </div>
     </section>
   );
