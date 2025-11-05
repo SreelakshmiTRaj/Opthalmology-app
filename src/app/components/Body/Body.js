@@ -48,6 +48,10 @@ export default function Body() {
   const blueIconPath = "/images/blueIcon.svg";
   const whiteTailPath = "/images/whiteTail.svg";
   const blueTailPath = "/images/blueTail.svg";
+  const leftRedLinePath = "/images/leftRedLine.svg";
+  const leftBlueLinePath = "/images/leftBlueLine.svg";
+  const rightRedLinePath = "/images/rightRedLine.svg";
+  const rightBlueLinePath = "/images/rightBlueLine.svg";
 
   const [visible, setVisible] = useState(true);
   const [selectedLabel, setSelectedLabel] = useState(null);
@@ -286,7 +290,7 @@ export default function Body() {
                 className={`absolute flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white`}
                 style={{
                   right: i === 0 ? "-2px" : "-22px",
-                  top: i === 0 ? "7px" : "3px",
+                  top: i === 0 ? "7px" : "7px",
                 }}
               >
                 <Image
@@ -310,6 +314,44 @@ export default function Body() {
             <span className="text-[#3AADED] text-lg">→</span>
           </motion.button>
         </motion.div>
+
+        <div className="absolute top-0 left-0 w-[200px] h-[120px]">
+          {/* Red Line */}
+          <Image
+            src={leftRedLinePath}
+            alt="Red decorative line"
+            width={199.5}
+            height={92.5}
+            className="absolute top-120 left-0 opacity-100"
+          />
+
+          {/* Blue Line */}
+          <Image
+            src={leftBlueLinePath}
+            alt="Blue decorative line"
+            width={54}
+            height={117}
+            className="absolute top-122 left-[10.25px] opacity-100"
+          />
+        </div>
+
+        <div className="absolute bottom-0 right-0 w-[449px] h-[170px]">
+          <Image
+            src={rightRedLinePath}
+            alt="Bottom red line"
+            width={350}
+            height={160}
+            className="absolute -top-20 -left-140 opacity-150"
+          />
+
+          <Image
+            src={rightBlueLinePath}
+            alt="Bottom blue line"
+            width={350}
+            height={350}
+            className="absolute -top-8 -left-138 opacity-100"
+          />
+        </div>
       </div>
     </section>
   );
