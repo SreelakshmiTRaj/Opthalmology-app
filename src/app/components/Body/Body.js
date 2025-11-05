@@ -157,7 +157,7 @@ export default function Body() {
 
     timeoutRef.current = setTimeout(() => {
       setIsManual(false);
-    }, 5000);
+    }, 3000);
   };
 
   const bodyImagePath = selectedLabel
@@ -247,12 +247,12 @@ export default function Body() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
             >
-              <div className="absolute text-white font-inter font-extrabold text-[20px] leading-[100%] w-[475px] h-[17px] top-125 left-10 text-left">
+              <div className="absolute text-white font-inter font-extrabold text-[20px] leading-[100%] w-[475px] h-[17px] top-127 left-10 text-left">
                 {selectedLabel}
               </div>
 
               <div
-                className="absolute text-white font-inter font-normal text-[15px] leading-[20px] w-[475px] top-135 left-10 text-left overflow-hidden text-ellipsis break-words pr-2 max-w-2xl"
+                className="absolute text-white font-inter font-normal text-[15px] leading-[20px] w-[475px] top-137 left-10 text-left overflow-hidden text-ellipsis break-words pr-30 max-w-2xl"
                 style={{
                   maxWidth: "475px",
                   whiteSpace: "normal",
