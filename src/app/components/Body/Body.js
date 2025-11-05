@@ -177,7 +177,7 @@ export default function Body() {
 
   return (
     <section
-      className="relative w-full bg-[#0b1626]/90 text-white py-12 px-6 flex flex-col items-center overflow-hidden"
+      className="relative w-full  text-white py-12 px-6 flex flex-col items-center overflow-hidden"
       onClick={handleSectionClick}
     >
       <h2 className="text-[36px] leading-[45px] font-bold text-center uppercase max-w-[784px] mb-10">
