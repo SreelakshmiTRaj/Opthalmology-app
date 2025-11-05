@@ -61,12 +61,12 @@ export default function Body() {
   const timeoutRef = useRef(null);
 
   const descriptions = {
-    "Neurology":
+    Neurology:
       "The brain and nervous system focused on neurologic disorders, treatments, and outcomes.",
-    "Cardiovascular":
+    Cardiovascular:
       "The cardiovascular system to analyze and measure various treatments and conditions of the heart and vasculature",
-    "Dermatology":
-      "Evaluation of the safety and effectiveness of medical interventions and therapeutics of the skin..",
+    Dermatology:
+      "Evaluation of the safety and effectiveness of medical interventions and therapeutics of the skin.",
     "Radiation Oncology":
       "The precise delivery techniques, tumor response, encompassing various techniques and treatments to treat cancer.",
     "Skeletal System":
@@ -74,21 +74,21 @@ export default function Body() {
     "Women's Health":
       "Female-specific health conditions, including reproductive health, and various female-specific treatments and therapies.",
     "Emerging Viruses": "Novel or newly recognized viral infections in humans.",
-    "Genetics":
+    Genetics:
       "Research involving DNA analysis to investigate the effectiveness and safety of new treatments or interventions.",
-    "Virology":
+    Virology:
       "The effectiveness of a vaccine or medical intervention in humans to treat viral infections.",
-    "Urology":
+    Urology:
       "The urologic system consisting of kidneys, ureters, bladder and urethra.",
-    "Inflammation":
+    Inflammation:
       "Inflammation of the human body caused by chronic illness and diseases.",
-    "Hepatology":
+    Hepatology:
       "Liver, gallbladder, biliary tree, and pancreas aiming to evaluate medical, surgical, or behavioral interventions.",
-    "Geriatrics":
+    Geriatrics:
       "A focus on older adults and changes that are related to the aging process.",
-    "Gastroenterology":
+    Gastroenterology:
       "The gastrointestinal tract (GI tract) diseases, procedures or treatment outcomes.",
-    "Endocrinology":
+    Endocrinology:
       "Hormones, endocrine glands, and specific endocrine disorders like diabetes, Graves’ disease, and other autoimmune disorders.",
   };
 
@@ -117,11 +117,15 @@ export default function Body() {
     ...rightSideLabels.map((l) => l.text),
     ...[...leftSideLabels].reverse().map((l) => l.text),
   ];
-
   useEffect(() => {
     const startDelay = setTimeout(
       () => {
         let index = currentIndex;
+
+        if (!selectedLabel) {
+          setSelectedLabel(sequence[0]);
+          setCurrentIndex(0);
+        }
 
         const startCycle = () => {
           intervalRef.current = setInterval(() => {
@@ -247,7 +251,14 @@ export default function Body() {
                 {selectedLabel}
               </div>
 
-              <div className="absolute text-white font-inter font-normal text-[10px] leading-[100%] w-[475px] h-[17px] top-135 left-10 text-left">
+              <div
+                className="absolute text-white font-inter font-normal text-[15px] leading-[20px] w-[475px] top-135 left-10 text-left overflow-hidden text-ellipsis break-words pr-2 max-w-2xl"
+                style={{
+                  maxWidth: "475px",
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
+                }}
+              >
                 {descriptions[selectedLabel]}
               </div>
             </motion.h3>
