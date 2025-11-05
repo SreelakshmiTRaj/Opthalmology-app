@@ -179,6 +179,44 @@ export default function Body() {
           </motion.div>
         </AnimatePresence>
 
+        <AnimatePresence mode="wait">
+          {selectedLabel && (
+            <motion.div
+              key={selectedLabel}
+              className="absolute w-[125px] h-[110px] top-105 left-75"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              <Image
+                src={`/images/${selectedLabel
+                  .toLowerCase()
+                  .replace(/['’\s]+/g, "")}_part.svg`}
+                alt={`${selectedLabel} organ illustration`}
+                fill
+                className="object-contain pointer-events-none select-none"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Dynamic Heading inside blue-red box */}
+        <AnimatePresence mode="wait">
+          {selectedLabel && (
+            <motion.h3
+              key={selectedLabel}
+              className="absolute text-white font-inter font-extrabold text-[20px] leading-[100%] w-[475px] h-[17px] top-125 left-10 text-left"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            >
+              {selectedLabel}
+            </motion.h3>
+          )}
+        </AnimatePresence>
+
         {rightSideLabels.map((label, idx) => (
           <Label
             key={`right-${idx}`}
@@ -320,8 +358,8 @@ export default function Body() {
           <Image
             src={leftRedLinePath}
             alt="Red decorative line"
-            width={199.5}
-            height={92.5}
+            width={210}
+            height={100}
             className="absolute top-120 left-0 opacity-100"
           />
 
@@ -329,8 +367,8 @@ export default function Body() {
           <Image
             src={leftBlueLinePath}
             alt="Blue decorative line"
-            width={54}
-            height={117}
+            width={60}
+            height={110}
             className="absolute top-122 left-[10.25px] opacity-100"
           />
         </div>
