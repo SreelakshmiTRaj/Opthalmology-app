@@ -46,9 +46,11 @@ export default function Body() {
   const lightPath = "/images/bodyLighting.svg";
   const personIconPath = "/images/personIcon.svg";
   const blueIconPath = "/images/blueIcon.svg";
+  const whiteTailPath = "/images/whiteTail.svg";
+  const blueTailPath = "/images/blueTail.svg";
 
   const [visible, setVisible] = useState(true);
-  const [selectedLabel, setSelectedLabel] = useState(null); // start with body.svg
+  const [selectedLabel, setSelectedLabel] = useState(null);
   const [isManual, setIsManual] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef(null);
@@ -110,17 +112,14 @@ export default function Body() {
     clearInterval(intervalRef.current);
     clearTimeout(timeoutRef.current);
 
-    // Manual selection
     setSelectedLabel(labelText);
     setIsManual(true);
 
-    // Resume auto-cycle after 5s — continuing from where it left off
     timeoutRef.current = setTimeout(() => {
       setIsManual(false);
     }, 5000);
   };
 
-  // Determine which image to show
   const bodyImagePath = selectedLabel
     ? `/images/${selectedLabel.toLowerCase().replace(/['’\s]+/g, "")}.svg`
     : "/images/body.svg";
@@ -149,7 +148,6 @@ export default function Body() {
       </h2>
 
       <div className="relative w-[1101px] h-[745px]">
-        {/* LIGHT */}
         <div className="absolute w-[500px] h-[520px] top-[200px] left-[590px] opacity-80">
           <Image
             src={lightPath}
@@ -159,7 +157,6 @@ export default function Body() {
           />
         </div>
 
-        {/* BODY IMAGE (animated) */}
         <AnimatePresence mode="wait">
           <motion.div
             key={bodyImagePath}
@@ -178,7 +175,6 @@ export default function Body() {
           </motion.div>
         </AnimatePresence>
 
-        {/* RIGHT SIDE LABELS */}
         {rightSideLabels.map((label, idx) => (
           <Label
             key={`right-${idx}`}
@@ -189,7 +185,6 @@ export default function Body() {
           />
         ))}
 
-        {/* LEFT SIDE LABELS */}
         {leftSideLabels.map((label, idx) => (
           <Label
             key={`left-${idx}`}
@@ -200,7 +195,6 @@ export default function Body() {
           />
         ))}
 
-        {/* CHAT BUBBLE + EXPLORE BUTTON (unchanged) */}
         <motion.div
           key={visible ? "visible" : "hidden"}
           className="absolute top-[20px] -left-20 chat-bubble"
@@ -218,13 +212,22 @@ export default function Body() {
               height={31}
               className="object-contain"
             />
-            <div className="w-[375px] h-[75px] rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
-              Does Sage Research exclusively focus on ophthalmology within its
-              CRO Services?
+            <div className="relative">
+              <Image
+                src={whiteTailPath}
+                alt="Chat tail"
+                width={15}
+                height={16}
+                className="absolute -left-[14px] top-[0px] opacity-100"
+              />
+
+              <div className="w-[375px] h-[75px] rounded-tl-[3px] rounded-tr-[12px] rounded-br-[12px] rounded-bl-[12px] bg-white text-gray-500 p-5 flex items-center text-[15px] font-medium shadow-[0_2px_10px_rgba(0,0,0,0.15)]">
+                Does Sage Research exclusively focus on ophthalmology within its
+                CRO Services?
+              </div>
             </div>
           </motion.div>
 
-          {/* BLUE BUBBLES */}
           {[1, 2].map((n, i) => (
             <motion.div
               key={i}
@@ -241,33 +244,51 @@ export default function Body() {
                   : "w-[400px] h-[75px] left-[125px] top-[35px]"
               }`}
             >
-              <div
-                className={`rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-[#003F6E] text-white ${
-                  i === 0 ? "w-[411px] h-[89px]" : "w-[380px] h-[75px]"
-                } px-5 py-4 flex items-center text-[13px] leading-[20px] font-poppins`}
-              >
-                <p>
-                  {i === 0 ? (
-                    <>
-                      In addition to our recognized expertise in ophthalmology,
-                      Sage Research offers comprehensive CRO services across a{" "}
-                      <span className="font-semibold">
-                        broad range of therapeutic areas.
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      The eyes are a unique, non-invasive window into systemic
-                      health, capable of revealing early signs of{" "}
-                      <span className="font-semibold">
-                        numerous diseases and disorders.
-                      </span>
-                    </>
-                  )}
-                </p>
+              <div className="relative">
+                <Image
+                  src={blueTailPath}
+                  alt="Blue chat tail"
+                  width={15}
+                  height={16}
+                  className="absolute -right-[15px] top-[0px] opacity-100"
+                />
+
+                <div
+                  className={`rounded-tl-[12px] rounded-br-[12px] rounded-bl-[12px] bg-[#003F6E] text-white ${
+                    i === 0 ? "w-[411px] h-[89px]" : "w-[380px] h-[75px]"
+                  } px-5 py-4 flex items-center text-[13px] leading-[20px] font-poppins`}
+                >
+                  <p>
+                    {i === 0 ? (
+                      <>
+                        In addition to our recognized expertise in
+                        ophthalmology, Sage Research offers comprehensive CRO
+                        services across a{" "}
+                        <span className="font-semibold">
+                          broad range of therapeutic areas.
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        The eyes are a unique, non-invasive window into systemic
+                        health, capable of revealing early signs of{" "}
+                        <span className="font-semibold">
+                          numerous diseases and disorders.
+                        </span>
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
 
-              <div className="absolute right-[-20px] top-[5px] flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white">
+              {/* Icon beside bubble */}
+              <div
+                className={`absolute flex items-center justify-center w-[30px] h-[30px] rounded-full border border-white`}
+                style={{
+                  right: i === 0 ? "-2px" : "-22px",
+                  top: i === 0 ? "7px" : "3px",
+                }}
+              >
                 <Image
                   src={blueIconPath}
                   alt="Blue globe icon"
@@ -279,7 +300,6 @@ export default function Body() {
             </motion.div>
           ))}
 
-          {/* EXPLORE BUTTON */}
           <motion.button
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: visible ? 0 : 200, opacity: visible ? 1 : 0 }}
