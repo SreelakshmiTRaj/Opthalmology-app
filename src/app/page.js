@@ -27,13 +27,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-10 bg-[#0a1427]">
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 w-full mx-auto">
           <Body />
-        </div>
-        <div className="relative z-20 bg-[]">
-          <Overview />
-        </div>
+      </section>
+      <section className="relative z-40">
+        <Overview />
       </section>
     </main>
   );
