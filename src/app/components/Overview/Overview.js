@@ -33,7 +33,8 @@ export default function Overview() {
                   : "bg-transparent text-gray-300 hover:text-white"
               }`}
           >
-            ANTERIOR
+            {/* 👇 Hide text when posterior is active */}
+            {activeTab === "posterior" ? "" : "ANTERIOR"}
           </button>
 
           {/* Blue Underline for Anterior */}
