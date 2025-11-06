@@ -18,7 +18,7 @@ export default function Home() {
             className="object-cover"
             quality={100}
           />
-          <div className="absolute inset-0 bg-[#0b1626]/60 z-10"></div>
+          {/* <div className="absolute inset-0 bg-[#0b1626]/60 z-10"></div> */}
         </div>
 
         <div className="relative z-10 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">

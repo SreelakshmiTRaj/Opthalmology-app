@@ -13,7 +13,6 @@ const Label = ({ label, isRightSide, onClickLabel, isActive }) => {
     : "linear-gradient(-90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)";
   const isHighlighted = isHovered || isActive;
 
-
   return (
     <motion.div
       className={`absolute flex items-center justify-center text-sm font-bold rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label transition-all duration-300 ease-in-out cursor-pointer ${
@@ -86,7 +85,7 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
             index = (index + 1) % sequence.length;
             onLabelClick(sequence[index]);
             setCurrentIndex(index);
-          }, 5000);
+          }, 3000);
         };
 
         if (!isManual) startCycle();
@@ -159,42 +158,52 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
             />
           </motion.div>
         )}
-      </AnimatePresence> 
+      </AnimatePresence>
 
       {/* Static human body image */}
-<div className="absolute w-[380px] h-[850px] top-[-80px] left-[650px]">
-  <Image
-    src={bodyImagePath}
-    alt="Human body"
-    fill
-    className="object-contain"
-    priority
-  />
-</div>
+      <AnimatePresence mode="wait">
+        {selectedLabel !== "Geriatrics" && (
+          <motion.div 
+            key="static-body" 
+            className="absolute w-[380px] h-[850px] top-[-80px] left-[650px]"
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+          >
+            <Image
+              src={bodyImagePath}
+              alt="Human body"
+              fill
+              className="object-contain"
+              priority
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-{/* Organ highlight (changes per label) */}
-<AnimatePresence mode="wait">
-  {selectedLabel && (
-    <motion.div
-      key={selectedLabel}
-      className="absolute w-[380px] h-[850px] top-[-80px] left-[650px]"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.6, ease: "easeInOut" }}
-    >
-      <Image
-        src={`/images/${selectedLabel
-          .toLowerCase()
-          .replace(/['’\s]+/g, "")}.svg`}
-        alt={`${selectedLabel} highlight`}
-        fill
-        className="object-contain"
-      />
-    </motion.div>
-  )}
-</AnimatePresence>
-
+      {/* Organ highlight*/}
+      <AnimatePresence mode="wait">
+        {selectedLabel && (
+          <motion.div
+            key={selectedLabel}
+            className="absolute w-[380px] h-[850px] top-[-80px] left-[650px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+          >
+            <Image
+              src={`/images/${selectedLabel
+                .toLowerCase()
+                .replace(/['’\s]+/g, "")}.svg`}
+              alt={`${selectedLabel} highlight`}
+              fill
+              className="object-contain"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Labels */}
       {[...rightSideLabels, ...leftSideLabels].map((label, i) => (
