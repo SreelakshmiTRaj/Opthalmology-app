@@ -289,11 +289,11 @@ export default function Hero() {
       </div>
 
       {/* Zigzag Line */}
-      <div className="absolute bottom-0 left-0 w-full z-20">
+      <div className="absolute bottom-0 w-full z-20">
         <Image
           src={line}
           alt="Zigzag border"
-          width={1920}
+          width={2000}
           height={120}
           className="w-full h-auto object-cover pointer-events-none select-none"
         />

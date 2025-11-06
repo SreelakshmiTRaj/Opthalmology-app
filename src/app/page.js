@@ -2,31 +2,39 @@ import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
 import Body from "./components/Body/Body";
 import Image from "next/image";
+import Overview from "./components/Overview/Overview";
 
 export default function Home() {
   const bgImagePath = "/images/bgImage.svg";
 
   return (
-    <section className="relative w-full min-h-screen bg-primary-dark text-white overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={bgImagePath}
-          alt="background"
-          fill
-          className="object-cover"
-          quality={100}
-        />
-        <div className="absolute inset-0 bg-[#0b1626]/60 z-10"></div>
-      </div>
+    <main className="w-full min-h-screen text-white overflow-hidden">
+      <section className="relative w-full min-h-screen bg-primary-dark overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={bgImagePath}
+            alt="background"
+            fill
+            className="object-cover"
+            quality={100}
+          />
+          <div className="absolute inset-0 bg-[#0b1626]/60 z-10"></div>
+        </div>
 
-      <div className="relative z-10 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Header />
-        <Hero />
-        <div className="absolute inset-0 backdrop-blur-[8px] bg-[#0b1626]/40 z-0 rounded-t-3xl"></div>
-        <div className="relative z-10">
+        <div className="relative z-10 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Header />
+          <Hero />
+        </div>
+      </section>
+
+      <section className="relative z-10 bg-[#0a1427]">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <Body />
         </div>
-      </div>
-    </section>
+        <div className="relative z-20 bg-[]">
+          <Overview />
+        </div>
+      </section>
+    </main>
   );
 }

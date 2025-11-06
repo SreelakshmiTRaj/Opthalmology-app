@@ -13,6 +13,7 @@ const Label = ({ label, isRightSide, onClickLabel, isActive }) => {
     : "linear-gradient(-90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)";
   const isHighlighted = isHovered || isActive;
 
+
   return (
     <motion.div
       className={`absolute flex items-center justify-center text-sm font-bold rounded-[24px] py-[10px] px-[15px] whitespace-nowrap label transition-all duration-300 ease-in-out cursor-pointer ${
@@ -71,25 +72,28 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
   ];
 
   useEffect(() => {
-    const startDelay = setTimeout(() => {
-      let index = currentIndex;
+    const startDelay = setTimeout(
+      () => {
+        let index = currentIndex;
 
-      if (!selectedLabel) {
-        onLabelClick(sequence[0]);
-        setCurrentIndex(0);
-      }
+        if (!selectedLabel) {
+          onLabelClick(sequence[0]);
+          setCurrentIndex(0);
+        }
 
-      const startCycle = () => {
-        intervalRef.current = setInterval(() => {
-          index = (index + 1) % sequence.length;
-          onLabelClick(sequence[index]);
-          setCurrentIndex(index);
-        }, 5000);
-      };
+        const startCycle = () => {
+          intervalRef.current = setInterval(() => {
+            index = (index + 1) % sequence.length;
+            onLabelClick(sequence[index]);
+            setCurrentIndex(index);
+          }, 5000);
+        };
 
-      if (!isManual) startCycle();
-      return () => clearInterval(intervalRef.current);
-    }, selectedLabel === null ? 3000 : 0);
+        if (!isManual) startCycle();
+        return () => clearInterval(intervalRef.current);
+      },
+      selectedLabel === null ? 5000 : 0
+    );
 
     return () => {
       clearInterval(intervalRef.current);
@@ -105,7 +109,12 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
     <>
       {/* Light glow */}
       <div className="absolute w-[500px] h-[520px] top-[200px] left-[590px] opacity-80">
-        <Image src={lightPath} alt="Body lighting" fill className="object-contain" />
+        <Image
+          src={lightPath}
+          alt="Body lighting"
+          fill
+          className="object-contain"
+        />
       </div>
 
       {/* Human body image */}
@@ -118,7 +127,12 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
         >
-          <Image src={bodyImagePath} alt={selectedLabel || "Human body"} fill className="object-contain" />
+          <Image
+            src={bodyImagePath}
+            alt={selectedLabel || "Human body"}
+            fill
+            className="object-contain"
+          />
         </motion.div>
       </AnimatePresence>
 
@@ -134,7 +148,9 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
             <Image
-              src={`/images/${selectedLabel.toLowerCase().replace(/['’\s]+/g, "")}_part.svg`}
+              src={`/images/${selectedLabel
+                .toLowerCase()
+                .replace(/['’\s]+/g, "")}_part.svg`}
               alt={`${selectedLabel} organ illustration`}
               fill
               className="object-contain"

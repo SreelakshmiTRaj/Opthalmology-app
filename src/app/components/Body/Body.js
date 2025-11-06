@@ -26,7 +26,7 @@ export default function Body() {
 
   return (
     <section
-      className="relative w-full text-white py-12 px-6 flex flex-col items-center overflow-hidden"
+      className="relative w-full text-white py-12 px-6 bg-[#0a1429] flex flex-col items-center"
       onClick={handleSectionClick}
     >
       {/* Heading */}
