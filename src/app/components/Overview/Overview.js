@@ -1,8 +1,10 @@
 "use client";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Overview() {
+    const backgroundSvgPath = "/images/overViewBg.svg";
   const [activeTab, setActiveTab] = useState("anterior");
 
   // Auto toggle every 3 seconds
@@ -14,7 +16,17 @@ export default function Overview() {
   }, []);
 
   return (
-    <section className="relative w-full py-20 text-center">
+    <section className="relative w-full py-20 text-center bg-[#0a1429] overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={backgroundSvgPath}
+          alt="Technical Background Pattern"
+          fill
+          className="object-cover **opacity-20**" 
+          quality={100}
+        />
+        {/* <div className="absolute inset-0 bg-[#0a1429]/30 z-10"></div> */}
+      </div>
       {/* Heading */}
       <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-wide mb-10">
         <span className="text-[#38bdf8]">OVERVIEW</span> OF PROJECTS
