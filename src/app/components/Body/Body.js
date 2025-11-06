@@ -1,5 +1,3 @@
-// components/Body/Body.js
-
 "use client";
 import Image from "next/image";
 import { useState } from "react";
@@ -9,6 +7,7 @@ import ChatBubbles from "./ChatBubbles";
 
 // Define the path to your background SVG
 const backgroundSvgPath = "/images/EyeIsTheWindowBg.svg";
+const line = "/images/Group 23.svg";
 
 export default function Body() {
   const [selectedLabel, setSelectedLabel] = useState(null);
@@ -31,8 +30,7 @@ export default function Body() {
 
   return (
     <section
-      className="relative w-full text-white py-12 px-6 bg-[#0a1429] 
-                 flex flex-col items-center bg-no-repeat bg-cover bg-center"
+      className="relative w-full text-white py-12 px-6 bg-[#0a1429] flex flex-col items-center bg-no-repeat bg-cover bg-center"
       onClick={handleSectionClick}
     >
       {/* Background Image Layer */}
@@ -41,7 +39,7 @@ export default function Body() {
           src={backgroundSvgPath}
           alt="Technical Background Pattern"
           fill
-          className="object-cover" 
+          className="object-cover"
           quality={100}
         />
         {/* <div className="absolute inset-0 bg-[#0a1429]/30 z-10"></div> */}

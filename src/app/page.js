@@ -27,7 +27,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-10 w-full mx-auto">
+      <section className="relative z-30 w-full mx-auto">
           <Body />
       </section>
       <section className="relative z-40">
