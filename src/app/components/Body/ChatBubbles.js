@@ -80,7 +80,7 @@ export default function ChatBubbles({ visible = true }) {
                   <>
                     In addition to our recognized expertise in ophthalmology,
                     Sage Research offers comprehensive CRO services across a{" "}
-                    <span className="font-semibold">
+                    <span className="font-bold">
                       broad range of therapeutic areas.
                     </span>
                   </>
@@ -88,7 +88,7 @@ export default function ChatBubbles({ visible = true }) {
                   <>
                     The eyes are a unique, non-invasive window into systemic
                     health, capable of revealing early signs of{" "}
-                    <span className="font-semibold">
+                    <span className="font-bold">
                       numerous diseases and disorders.
                     </span>
                   </>

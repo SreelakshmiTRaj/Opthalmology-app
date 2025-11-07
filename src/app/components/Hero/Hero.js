@@ -186,9 +186,9 @@ export default function Hero() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 40 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="relative w-[431px] h-[221px] rounded-[32px] 
-                 bg-[linear-gradient(90deg,rgba(58,173,237,0.1)_0%,rgba(58,173,237,0.01)_100%)]
-                 backdrop-blur-[20px] p-8 text-white leading-relaxed shadow-[0_4px_25px_rgba(0,0,0,0.25)]"
+              className="relative w-[431px] h-[221px] rounded-[32px]
+                 bg-[linear-gradient(90deg,rgba(58,173,237,0.0)_0%,rgba(58,173,237,0.01)_100%)]
+                 backdrop-blur-[5px] p-8 text-white leading-relaxed shadow-[0_4px_25px_rgba(0,0,0,0.25)]"
             >
               {activeLabel === "MARKET" && (
                 <p className="text-[15px] sm:text-[16px] font-bold text-white/90">

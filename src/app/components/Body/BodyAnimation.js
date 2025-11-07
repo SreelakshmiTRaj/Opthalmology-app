@@ -143,10 +143,10 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
           <motion.div
             key={selectedLabel}
             className="absolute w-[125px] h-[110px] top-105 left-75"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
             <Image
               src={`/images/${selectedLabel
