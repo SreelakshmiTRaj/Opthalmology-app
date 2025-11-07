@@ -85,7 +85,7 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
             index = (index + 1) % sequence.length;
             onLabelClick(sequence[index]);
             setCurrentIndex(index);
-          }, 3000);
+          }, 5000);
         };
 
         if (!isManual) startCycle();

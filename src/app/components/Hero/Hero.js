@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 export default function Hero() {
   const eyePath = "/images/eyeImage.png";
@@ -13,6 +13,14 @@ export default function Hero() {
   const [rotation, setRotation] = useState(0);
   const [activeLabel, setActiveLabel] = useState("CONCEPT");
   const [hoverLabel, setHoverLabel] = useState(null);
+  const [isMobile, setIsMobile] = useState(false); // 👈 NEW STATE
+
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth < 1024);
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
 
   const labelAngles = {
     MARKET: -90,
@@ -20,6 +28,20 @@ export default function Hero() {
     DESIGN: 90,
     TRIAL: 180,
   };
+
+  // On mobile, the active label (initially CONCEPT) should be bottom slot
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isMobile && activeLabel === "CONCEPT") {
+        setActiveLabel("DESIGN");
+        setRotation(90);
+      } else if (!isMobile && activeLabel === "DESIGN") {
+        setActiveLabel("CONCEPT");
+        setRotation(0);
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [isMobile]);
 
   const shortestDelta = (from, to) => {
     let diff = (to - from) % 360;
@@ -169,7 +191,22 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        <div className="absolute top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]">
+        {/* <div className="absolute top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]">
+          <Image
+            src={arrow}
+            alt="Curved arrow"
+            fill
+            className="object-contain pointer-events-none select-none"
+          />
+        </div> */}
+
+        <div
+          className={`absolute ${
+            isMobile
+              ? "bottom-87 left-84 -translate-x-1/2 rotate-90  w-18 h-15"
+              : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
+          } transition-all duration-500`}
+        >
           <Image
             src={arrow}
             alt="Curved arrow"
