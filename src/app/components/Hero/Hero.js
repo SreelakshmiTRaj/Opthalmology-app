@@ -203,7 +203,7 @@ export default function Hero() {
         <div
           className={`absolute ${
             isMobile
-              ? "bottom-87 left-84 -translate-x-1/2 rotate-90  w-18 h-15"
+              ? "bottom-83 left-84 -translate-x-1/2 rotate-90  w-19 h-20"
               : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
           } transition-all duration-500`}
         >
