@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function Hero() {
   const eyePath = "/images/eyeImage.png";
@@ -135,7 +135,8 @@ export default function Hero() {
               const isActive = activeLabel === label;
               const isHovering = hoverLabel === label;
 
-              const positionClasses =
+              // Desktop positions (keep your original layout)
+              const desktopPosition =
                 label === "MARKET"
                   ? "top-[0.04rem] left-1/2 -translate-x-1/2"
                   : label === "CONCEPT"
@@ -143,6 +144,20 @@ export default function Hero() {
                   : label === "DESIGN"
                   ? "bottom-[0.2rem] left-1/2 -translate-x-1/2"
                   : "left-[-2.1rem] top-45 -translate-y-1/2";
+
+              // Mobile/medium positions
+              const mobilePosition =
+                label === "CONCEPT"
+                  ? "top-5 left-32 -translate-y-1/2 rotate-90"
+                  : label === "TRIAL"
+                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90"
+                  : label === "MARKET"
+                  ? "right-[-2.2rem] top-45 -translate-y-1/2 rotate-270"
+                  : "left-[-2.1rem] top-45 -translate-y-1/2 rotate-90";
+
+              const positionClasses = isMobile
+                ? mobilePosition
+                : desktopPosition;
 
               return (
                 <motion.div
@@ -203,7 +218,7 @@ export default function Hero() {
         <div
           className={`absolute ${
             isMobile
-              ? "bottom-83 left-84 -translate-x-1/2 rotate-90  w-19 h-20"
+              ? "bottom-82 left-75 -translate-x-1/2 rotate-90  w-19 h-20"
               : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
           } transition-all duration-500`}
         >
