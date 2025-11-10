@@ -181,12 +181,12 @@ export default function Hero() {
               // Mobile/medium positions
               const mobilePosition =
                 label === "CONCEPT"
-                  ? "bottom-[-2.5rem] left-1/2 -translate-x-1/2" // bottom center
+                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90" // bottom center
                   : label === "TRIAL"
-                  ? "top-[-2.5rem] left-1/2 -translate-x-1/2" // top center
+                  ? "top-0 left-1/2 -translate-x-1/2 rotate-90" // top center
                   : label === "DESIGN"
-                  ? "left-[-3rem] top-1/2 -translate-y-1/2" // left center
-                  : "right-[-3rem] top-1/2 -translate-y-1/2"; // right center
+                  ? "-left-8 top-1/2 -translate-y-1/2 rotate-90" // left center
+                  : "-right-8 top-1/2 -translate-y-1/2 rotate-90"; // right center
 
               const positionClasses = isMobile
                 ? mobilePosition
@@ -198,10 +198,10 @@ export default function Hero() {
                   onClick={() => handleClickTo(label)}
                   onHoverStart={() => setHoverLabel(label)}
                   onHoverEnd={() => setHoverLabel(null)}
-                  // animate={{ rotate: getLabelDisplayRotation(label) }}
-                  animate={{
-                    rotate: isMobile ? 0 : getLabelDisplayRotation(label),
-                  }}
+                  animate={{ rotate: getLabelDisplayRotation(label) }}
+                  // animate={{
+                  //   rotate: isMobile ? 0 : getLabelDisplayRotation(label),
+                  // }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                   className={`group absolute ${positionClasses}
         text-xs sm:text-sm font-semibold cursor-pointer rounded-[4px]
