@@ -33,7 +33,7 @@ export default function Hero() {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isMobile && activeLabel === "CONCEPT") {
-        setActiveLabel("DESIGN");
+        setActiveLabel(" CONCEPT");
         setRotation(90);
       } else if (!isMobile && activeLabel === "DESIGN") {
         setActiveLabel("CONCEPT");
@@ -50,14 +50,37 @@ export default function Hero() {
     return diff;
   };
 
+  // const handleClickTo = (label) => {
+  //   const angle = labelAngles[label];
+  //   if (angle === undefined) return;
+
+  //   setActiveLabel(label);
+  //   setRotation((current) => {
+  //     const curNorm = ((current % 360) + 360) % 360;
+  //     const delta = shortestDelta(curNorm, -angle);
+  //     return current + delta;
+  //     // return isMobile ? current - delta : current + delta;
+  //   });
+  // };
+
   const handleClickTo = (label) => {
-    const angle = labelAngles[label];
-    if (angle === undefined) return;
+    const base = labelAngles[label];
+    if (base === undefined) return;
 
     setActiveLabel(label);
+
+    const screenAngle = isMobile ? 360 : 0;
+
+    let desiredRotation = screenAngle - base;
+
     setRotation((current) => {
       const curNorm = ((current % 360) + 360) % 360;
-      const delta = shortestDelta(curNorm, -angle);
+      let desiredNorm = ((desiredRotation % 360) + 360) % 360;
+
+      let delta = (desiredNorm - curNorm) % 360;
+      if (delta < -180) delta += 360;
+      if (delta >= 180) delta -= 360;
+
       return current + delta;
     });
   };
@@ -146,14 +169,24 @@ export default function Hero() {
                   : "left-[-2.1rem] top-45 -translate-y-1/2";
 
               // Mobile/medium positions
+              // const mobilePosition =
+              //   label === "CONCEPT"
+              //     ? "top-5 left-32 -translate-y-1/2 rotate-90"
+              //     : label === "TRIAL"
+              //     ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90"
+              //     : label === "MARKET"
+              //     ? "right-[-2.2rem] top-45 -translate-y-1/2 rotate-270"
+              //     : "left-[-2.1rem] top-45 -translate-y-1/2 rotate-90";
+
+              // Mobile/medium positions
               const mobilePosition =
                 label === "CONCEPT"
-                  ? "top-5 left-32 -translate-y-1/2 rotate-90"
+                  ? "bottom-[-2.5rem] left-1/2 -translate-x-1/2" // bottom center
                   : label === "TRIAL"
-                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90"
-                  : label === "MARKET"
-                  ? "right-[-2.2rem] top-45 -translate-y-1/2 rotate-270"
-                  : "left-[-2.1rem] top-45 -translate-y-1/2 rotate-90";
+                  ? "top-[-2.5rem] left-1/2 -translate-x-1/2" // top center
+                  : label === "DESIGN"
+                  ? "left-[-3rem] top-1/2 -translate-y-1/2" // left center
+                  : "right-[-3rem] top-1/2 -translate-y-1/2"; // right center
 
               const positionClasses = isMobile
                 ? mobilePosition
@@ -165,7 +198,10 @@ export default function Hero() {
                   onClick={() => handleClickTo(label)}
                   onHoverStart={() => setHoverLabel(label)}
                   onHoverEnd={() => setHoverLabel(null)}
-                  animate={{ rotate: getLabelDisplayRotation(label) }}
+                  // animate={{ rotate: getLabelDisplayRotation(label) }}
+                  animate={{
+                    rotate: isMobile ? 0 : getLabelDisplayRotation(label),
+                  }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                   className={`group absolute ${positionClasses}
         text-xs sm:text-sm font-semibold cursor-pointer rounded-[4px]
@@ -218,7 +254,7 @@ export default function Hero() {
         <div
           className={`absolute ${
             isMobile
-              ? "bottom-82 right-60 -translate-x-1/2 rotate-90  w-15 h-20"
+              ? "bottom-82 right-30 -translate-x-1/3 rotate-90  w-15 h-20"
               : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
           } transition-all duration-500`}
         >
