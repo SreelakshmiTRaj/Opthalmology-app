@@ -13,10 +13,15 @@ export default function Hero() {
   const [rotation, setRotation] = useState(0);
   const [activeLabel, setActiveLabel] = useState("CONCEPT");
   const [hoverLabel, setHoverLabel] = useState(null);
-  const [isMobile, setIsMobile] = useState(false); // 👈 NEW STATE
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMedium, setIsMedium] = useState(false);
 
   useEffect(() => {
-    const checkScreen = () => setIsMobile(window.innerWidth < 1024);
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsMedium(width >= 960 && width < 1024);
+    };
     checkScreen();
     window.addEventListener("resize", checkScreen);
     return () => window.removeEventListener("resize", checkScreen);
@@ -29,7 +34,7 @@ export default function Hero() {
     TRIAL: 180,
   };
 
-  // On mobile, the active label (initially CONCEPT) should be bottom slot
+  // On mobile, the active label
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isMobile && activeLabel === "CONCEPT") {
@@ -49,19 +54,6 @@ export default function Hero() {
     if (diff >= 180) diff -= 360;
     return diff;
   };
-
-  // const handleClickTo = (label) => {
-  //   const angle = labelAngles[label];
-  //   if (angle === undefined) return;
-
-  //   setActiveLabel(label);
-  //   setRotation((current) => {
-  //     const curNorm = ((current % 360) + 360) % 360;
-  //     const delta = shortestDelta(curNorm, -angle);
-  //     return current + delta;
-  //     // return isMobile ? current - delta : current + delta;
-  //   });
-  // };
 
   const handleClickTo = (label) => {
     const base = labelAngles[label];
@@ -158,7 +150,7 @@ export default function Hero() {
               const isActive = activeLabel === label;
               const isHovering = hoverLabel === label;
 
-              // Desktop positions (keep your original layout)
+              // Desktop positions
               const desktopPosition =
                 label === "MARKET"
                   ? "top-[0.04rem] left-1/2 -translate-x-1/2"
@@ -169,24 +161,14 @@ export default function Hero() {
                   : "left-[-2.1rem] top-45 -translate-y-1/2";
 
               // Mobile/medium positions
-              // const mobilePosition =
-              //   label === "CONCEPT"
-              //     ? "top-5 left-32 -translate-y-1/2 rotate-90"
-              //     : label === "TRIAL"
-              //     ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90"
-              //     : label === "MARKET"
-              //     ? "right-[-2.2rem] top-45 -translate-y-1/2 rotate-270"
-              //     : "left-[-2.1rem] top-45 -translate-y-1/2 rotate-90";
-
-              // Mobile/medium positions
               const mobilePosition =
                 label === "CONCEPT"
-                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90" // bottom center
+                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90" 
                   : label === "TRIAL"
-                  ? "top-0 left-1/2 -translate-x-1/2 rotate-90" // top center
+                  ? "top-0 left-1/2 -translate-x-1/2 rotate-90"
                   : label === "DESIGN"
-                  ? "-left-8 top-1/2 -translate-y-1/2 rotate-90" // left center
-                  : "-right-8 top-1/2 -translate-y-1/2 rotate-90"; // right center
+                  ? "-left-8 top-1/2 -translate-y-1/2 rotate-90" 
+                  : "-right-8 top-1/2 -translate-y-1/2 rotate-90"; 
 
               const positionClasses = isMobile
                 ? mobilePosition
@@ -199,9 +181,6 @@ export default function Hero() {
                   onHoverStart={() => setHoverLabel(label)}
                   onHoverEnd={() => setHoverLabel(null)}
                   animate={{ rotate: getLabelDisplayRotation(label) }}
-                  // animate={{
-                  //   rotate: isMobile ? 0 : getLabelDisplayRotation(label),
-                  // }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                   className={`group absolute ${positionClasses}
         text-xs sm:text-sm font-semibold cursor-pointer rounded-[4px]
@@ -242,27 +221,20 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* <div className="absolute top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]">
-          <Image
-            src={arrow}
-            alt="Curved arrow"
-            fill
-            className="object-contain pointer-events-none select-none"
-          />
-        </div> */}
-
         <div
           className={`absolute ${
             isMobile
-              ? "bottom-82 right-30 -translate-x-1/3 rotate-90  w-15 h-20"
-              : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
+              ? "top-1/2 left-1/2 translate-x-1/2 w-10 h-10"
+              : isMedium
+              ? "top-[7.5rem] left- w-[6.5rem] h-[4.1rem]"
+              :"top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
           } transition-all duration-500`}
         >
           <Image
             src={arrow}
             alt="Curved arrow"
             fill
-            className="object-contain pointer-events-none select-none"
+            className={`object-contain pointer-events-none select-none ${isMobile ? 'rotate-90':''}`}
           />
         </div>
 
