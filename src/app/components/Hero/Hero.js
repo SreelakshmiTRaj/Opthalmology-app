@@ -10,23 +10,8 @@ export default function Hero() {
   const line = "/images/Group 23.svg";
   const sideArrow = "/images/sideArrow.svg";
 
-  const [rotation, setRotation] = useState(0);
-  const [activeLabel, setActiveLabel] = useState("CONCEPT");
-  const [hoverLabel, setHoverLabel] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isMedium, setIsMedium] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => {
-      const width = window.innerWidth;
-      setIsMobile(width < 768);
-      setIsMedium(width >= 960 && width < 1024);
-    };
-    checkScreen();
-    window.addEventListener("resize", checkScreen);
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
-
+  // 1. UPDATED ORDER for auto-rotation
+  const labels = ["CONCEPT", "MARKET", "TRIAL", "DESIGN"];
   const labelAngles = {
     MARKET: -90,
     CONCEPT: 0,
@@ -34,47 +19,20 @@ export default function Hero() {
     TRIAL: 180,
   };
 
-  // Mobile view
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isMobile && activeLabel === "CONCEPT") {
-        setActiveLabel(" CONCEPT");
-        setRotation(90);
-      } else if (!isMobile && activeLabel === "DESIGN") {
-        setActiveLabel("CONCEPT");
-        setRotation(0);
-      }
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [isMobile]);
+  const [rotation, setRotation] = useState(0);
+  const [activeLabel, setActiveLabel] = useState("CONCEPT");
+  const [hoverLabel, setHoverLabel] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMedium, setIsMedium] = useState(false);
+  const [autoRotateIntervalId, setAutoRotateIntervalId] = useState(null);
+
+  // --- Utility Functions ---
 
   const calculateShortestRotationDelta = (from, to) => {
     let diff = (to - from) % 360;
     if (diff < -180) diff += 360;
     if (diff >= 180) diff -= 360;
     return diff;
-  };
-
-  const handleLabelClick = (label) => {
-    const base = labelAngles[label];
-    if (base === undefined) return;
-
-    setActiveLabel(label);
-
-    const screenAngle = isMobile ? 360 : 0;
-
-    let desiredRotation = screenAngle - base;
-
-    setRotation((current) => {
-      const curNorm = ((current % 360) + 360) % 360;
-      let desiredNorm = ((desiredRotation % 360) + 360) % 360;
-
-      let delta = (desiredNorm - curNorm) % 360;
-      if (delta < -180) delta += 360;
-      if (delta >= 180) delta -= 360;
-
-      return current + delta;
-    });
   };
 
   const normalizeAngle = (angle) => ((angle % 360) + 360) % 360;
@@ -106,6 +64,120 @@ export default function Hero() {
     return -rotation + slotRotation;
   };
 
+  // --- Auto-Rotation and Click Logic ---
+
+  const handleLabelClick = (label) => {
+    // 1. Stop auto-rotation when user manually clicks
+    if (autoRotateIntervalId) {
+      clearInterval(autoRotateIntervalId);
+      setAutoRotateIntervalId(null);
+    }
+
+    const base = labelAngles[label];
+    if (base === undefined) return;
+
+    setActiveLabel(label);
+
+    const screenAngle = isMobile ? 360 : 0;
+    let desiredRotation = screenAngle - base;
+
+    setRotation((current) => {
+      const curNorm = ((current % 360) + 360) % 360;
+      let desiredNorm = ((desiredRotation % 360) + 360) % 360;
+
+      let delta = calculateShortestRotationDelta(curNorm, desiredNorm);
+
+      return current + delta;
+    });
+  };
+
+  // Function to set up the rotation loop
+  const startAutoRotationLoop = () => {
+    // Determine the starting index
+    // Use the cleaned activeLabel for index search
+    let currentIndex = labels.findIndex(l => l === activeLabel.trim());
+    
+    // Safety check: clear any existing interval
+    if (autoRotateIntervalId) {
+      clearInterval(autoRotateIntervalId);
+    }
+
+    const intervalId = setInterval(() => {
+      currentIndex = (currentIndex + 1) % labels.length;
+      const nextLabel = labels[currentIndex];
+      
+      // The auto-rotation logic itself
+      const base = labelAngles[nextLabel];
+      if (base === undefined) return;
+
+      setActiveLabel(nextLabel);
+
+      const screenAngle = isMobile ? 360 : 0;
+      let desiredRotation = screenAngle - base;
+
+      setRotation((current) => {
+        const curNorm = normalizeAngle(current);
+        let desiredNorm = normalizeAngle(desiredRotation);
+
+        let delta = calculateShortestRotationDelta(curNorm, desiredNorm);
+
+        return current + delta;
+      });
+    }, 5000); // Rotate every 5 seconds (5000ms)
+
+    setAutoRotateIntervalId(intervalId);
+  };
+
+
+  // --- useEffect Hooks ---
+
+  // 1. Check screen size
+  useEffect(() => {
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsMedium(width >= 960 && width < 1024);
+    };
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  // 2. Initial mobile view adjustment (from original code)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // The original code used " CONCEPT" (with a space) to track the mobile initial state
+      if (isMobile && activeLabel === "CONCEPT") {
+        setActiveLabel(" CONCEPT");
+        setRotation(90);
+      } else if (!isMobile && activeLabel === "DESIGN") {
+        setActiveLabel("CONCEPT");
+        setRotation(0);
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [isMobile]);
+
+  // 3. Start Auto-Rotation on Mount / Clean up on unmount
+  useEffect(() => {
+    // Only start the loop if an interval isn't already running
+    // The conditional check for activeLabel is important because the cleanup function might clear the ID.
+    if (!autoRotateIntervalId) {
+        startAutoRotationLoop();
+    }
+    
+    // Cleanup function to clear the interval when the component unmounts
+    return () => {
+      // Clear the interval ID if it was successfully set
+      if (autoRotateIntervalId) {
+        clearInterval(autoRotateIntervalId);
+      }
+    };
+  }, [isMobile, activeLabel]); // Rerun if mobile state or activeLabel changes
+
+
+  // --- Rendered Component ---
+
   return (
     <main className="pt-1 pb-32 relative z-10">
       <div className="max-w-[57rem] mx-auto flex flex-col items-center text-center space-y-7 mt-5">
@@ -123,20 +195,23 @@ export default function Hero() {
 
       <div className="relative max-w-[58.4rem] mx-auto mt-[5rem] flex flex-col lg:flex-row justify-between items-center gap-10 px-6 lg:px-0">
         <div className="relative w-[22.4rem] h-[22.9rem] flex items-center justify-center mx-auto">
+          {/* NON-ROTATING Eye Image */}
+          <div className="relative w-[16.3rem] h-[16.25rem] z-10">
+            <Image
+              src={eyePath}
+              alt="Eye"
+              fill
+              className="object-contain pointer-events-none select-none"
+            />
+          </div>
+          
+          {/* ROTATING Container (Nerves and Labels) */}
           <motion.div
-            className="relative w-full h-full flex items-center justify-center"
+            className="absolute w-full h-full flex items-center justify-center z-20"
             animate={{ rotate: rotation }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
           >
-            <div className="relative w-[16.3rem] h-[16.25rem]">
-              <Image
-                src={eyePath}
-                alt="Eye"
-                fill
-                className="object-contain pointer-events-none select-none"
-              />
-            </div>
-
+            {/* Nerves Image inside the rotating container */}
             <div className="absolute top-[1.2rem] left-[1.3rem] w-[19.7rem] h-[20rem]">
               <Image
                 src={nerves}
@@ -146,11 +221,12 @@ export default function Hero() {
               />
             </div>
 
-            {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => {
-              const isActive = activeLabel === label;
+            {/* Labels inside the rotating container */}
+            {Object.keys(labelAngles).map((label) => { // Map over labelAngles to maintain position logic
+              const isActive = activeLabel.trim() === label; 
               const isHovering = hoverLabel === label;
 
-              // Desktop positions
+              // Desktop positions (unchanged)
               const desktopPosition =
                 label === "MARKET"
                   ? "top-[0.04rem] left-1/2 -translate-x-1/2"
@@ -160,15 +236,15 @@ export default function Hero() {
                   ? "bottom-[0.2rem] left-1/2 -translate-x-1/2"
                   : "left-[-2.1rem] top-45 -translate-y-1/2";
 
-              // Mobile/medium positions
+              // Mobile/medium positions (unchanged)
               const mobilePosition =
                 label === "CONCEPT"
-                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90" 
+                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90"
                   : label === "TRIAL"
                   ? "top-0 left-1/2 -translate-x-1/2 rotate-90"
                   : label === "DESIGN"
-                  ? "-left-8 top-1/2 -translate-y-1/2 rotate-90" 
-                  : "-right-8 top-1/2 -translate-y-1/2 rotate-90"; 
+                  ? "-left-8 top-1/2 -translate-y-1/2 rotate-90"
+                  : "-right-8 top-1/2 -translate-y-1/2 rotate-90";
 
               const positionClasses = isMobile
                 ? mobilePosition
@@ -180,6 +256,7 @@ export default function Hero() {
                   onClick={() => handleLabelClick(label)}
                   onHoverStart={() => setHoverLabel(label)}
                   onHoverEnd={() => setHoverLabel(null)}
+                  // The label counter-rotates to stay upright relative to the screen
                   animate={{ rotate: getLabelDisplayRotation(label) }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                   className={`group absolute ${positionClasses}
@@ -228,14 +305,16 @@ export default function Hero() {
               ? "top-1/2 left-1/2 translate-x-1/2 w-10 h-10"
               : isMedium
               ? "top-[7.5rem] left- w-[6.5rem] h-[4.1rem]"
-              :"top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
+              : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
           } transition-all duration-500`}
         >
           <Image
             src={arrow}
             alt="Curved arrow"
             fill
-            className={`object-contain pointer-events-none select-none ${isMobile ? 'rotate-90':''}`}
+            className={`object-contain pointer-events-none select-none ${
+              isMobile ? "rotate-90" : ""
+            }`}
           />
         </div>
 
@@ -248,10 +327,10 @@ export default function Hero() {
               exit={{ opacity: 0, x: 40 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="relative w-[431px] h-[221px] rounded-[32px]
-                 bg-[linear-gradient(90deg,rgba(58,173,237,0.0)_0%,rgba(58,173,237,0.01)_100%)]
-                 backdrop-blur-[5px] p-8 text-white leading-relaxed shadow-[0_4px_25px_rgba(0,0,0,0.25)]"
+                bg-[linear-gradient(90deg,rgba(58,173,237,0.0)_0%,rgba(58,173,237,0.01)_100%)]
+                backdrop-blur-[5px] p-8 text-white leading-relaxed shadow-[0_4px_25px_rgba(0,0,0,0.25)]"
             >
-              {activeLabel === "MARKET" && (
+              {activeLabel.trim() === "MARKET" && (
                 <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
                   The market for clinical monitoring devices, including OCT
                   technology, is experiencing rapid growth driven by the
@@ -259,21 +338,21 @@ export default function Hero() {
                   healthcare solutions.
                 </p>
               )}
-              {activeLabel === "CONCEPT" && (
+              {activeLabel.trim() === "CONCEPT" && (
                 <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
                   Our research is vital for tackling the increasing global
                   burden of eye diseases, particularly as vision impairment and
                   blindness become more prevalent in aging populations.
                 </p>
               )}
-              {activeLabel === "DESIGN" && (
+              {activeLabel.trim() === "DESIGN" && (
                 <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
                   Developing clinical monitoring systems utilizing OCT devices,
                   with a focus on enhancing image resolution, improving ease of
                   use, and integrating advanced data analytics.
                 </p>
               )}
-              {activeLabel === "TRIAL" && (
+              {activeLabel.trim() === "TRIAL" && (
                 <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
                   Clinical trials leveraging OCT technology are crucial for
                   assessing the safety and efficacy of new treatments, offering
@@ -283,8 +362,9 @@ export default function Hero() {
               )}
 
               <div className="flex items-center space-x-1.5 mt-6 justify-start">
-                {["MARKET", "CONCEPT", "DESIGN", "TRIAL"].map((label) => {
-                  const isActive = activeLabel === label;
+                {/* Use the new label order for the dots */}
+                {labels.map((label) => {
+                  const isActive = activeLabel.trim() === label;
                   return (
                     <div
                       key={label}
