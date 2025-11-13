@@ -6,12 +6,17 @@ import { rightSideLabels,leftSideLabels } from "./labelData"
 
 const Label = ({ label, isRightSide, onClickLabel, isActive }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  // Default background gradient ofr the label
   const baseBackground = isRightSide
     ? "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)"
     : "linear-gradient(90deg, rgba(255,255,255,0) 50%, rgba(255,255,255,0.2) 100%)";
+
+  // Default background gradient for active label
   const hoverBackground = isRightSide
     ? "linear-gradient(90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)"
     : "linear-gradient(-90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)";
+
   const isHighlighted = isHovered || isActive;
 
   return (
@@ -50,6 +55,7 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
     ...[...leftSideLabels].reverse().map((l) => l.text),
   ];
 
+  // To manage automatic cycling of labels
   useEffect(() => {
     const startDelay = setTimeout(
       () => {
@@ -60,6 +66,7 @@ export default function BodyAnimation({ selectedLabel, onLabelClick }) {
           setCurrentIndex(0);
         }
 
+        // Function for auto-cycling interval
         const startCycle = () => {
           intervalRef.current = setInterval(() => {
             index = (index + 1) % sequence.length;

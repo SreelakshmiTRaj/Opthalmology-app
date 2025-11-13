@@ -5,18 +5,20 @@ import BodyAnimation from "./BodyAnimation";
 import BodyDescriptionBox from "./BodyDescriptionBox";
 import ChatBubbles from "./ChatBubbles";
 
-// Define the path to your background SVG
 const backgroundSvgPath = "/images/EyeIsTheWindowBg.svg";
 const line = "/images/Group 23.svg";
 
 export default function Body() {
   const [selectedLabel, setSelectedLabel] = useState(null);
+
   const [visible, setVisible] = useState(true);
 
+  // Function to set the selected label when clicked
   const handleLabelClick = (label) => {
     setSelectedLabel(label);
   };
 
+  // Function for clicks on background
   const handleSectionClick = (e) => {
     if (
       e.target.closest(".body-image") ||
@@ -44,6 +46,7 @@ export default function Body() {
         />
       </div>
 
+      {/*ZigZag image*/}
       <div className="absolute top-0 w-full z-10">
         <Image
           src={line}
@@ -54,9 +57,7 @@ export default function Body() {
         />
       </div>
 
-      {/* Content Layer (Make sure content is above the background layers) */}
       <div className="relative z-20 w-full flex flex-col items-center">
-        {/* Heading */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight md:leading-[45px] font-bold text-center uppercase max-w-[784px] mx-auto mb-6 pt-10 md:mb-10 px-4">
           IT IS OFTEN SAID THAT THE
           <br />
@@ -64,15 +65,17 @@ export default function Body() {
           <span className="whitespace-nowrap">SOUL.</span>
         </h2>
 
-        {/* Container for animation + description box + chat bubbles */}
         <div className="relative w-[1101px] h-[745px]">
+          {/*Body diagram*/}
           <BodyAnimation
             selectedLabel={selectedLabel}
             onLabelClick={handleLabelClick}
           />
 
+          {/*Description box*/}
           <BodyDescriptionBox selectedLabel={selectedLabel} />
 
+          {/*Chat bubbles*/}
           <ChatBubbles visible={visible} />
         </div>
       </div>
