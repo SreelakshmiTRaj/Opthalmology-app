@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import RotatingEyeCircle from "./RotatingEye";
-import ContentCard from "./ContentCard"; 
+import ContentCard from "./ContentCard";
 
 const arrow = "/images/arrow.svg";
 const line = "/images/Group 23.svg";
@@ -15,7 +15,7 @@ const labelAngles = {
   TRIAL: 180,
 };
 
-const labels = ["CONCEPT", "MARKET", "TRIAL", "DESIGN"]; 
+const labels = ["CONCEPT", "MARKET", "TRIAL", "DESIGN"];
 
 export default function Hero() {
   const [rotation, setRotation] = useState(0);
@@ -23,7 +23,6 @@ export default function Hero() {
   const [isMobile, setIsMobile] = useState(false);
   const [isMedium, setIsMedium] = useState(false);
   const [autoRotateIntervalId, setAutoRotateIntervalId] = useState(null);
-
 
   const calculateShortestRotationDelta = (from, to) => {
     let diff = (to - from) % 360;
@@ -35,8 +34,8 @@ export default function Hero() {
   const normalizeAngle = (angle) => ((angle % 360) + 360) % 360;
 
   const startAutoRotationLoop = () => {
-    let currentIndex = labels.findIndex(l => l === activeLabel.trim());
-    
+    let currentIndex = labels.findIndex((l) => l === activeLabel.trim());
+
     if (autoRotateIntervalId) {
       clearInterval(autoRotateIntervalId);
     }
@@ -44,7 +43,7 @@ export default function Hero() {
     const intervalId = setInterval(() => {
       currentIndex = (currentIndex + 1) % labels.length;
       const nextLabel = labels[currentIndex];
-      
+
       const base = labelAngles[nextLabel];
       if (base === undefined) return;
 
@@ -61,7 +60,7 @@ export default function Hero() {
 
         return current + delta;
       });
-    }, 5000); 
+    }, 5000);
 
     setAutoRotateIntervalId(intervalId);
   };
@@ -92,9 +91,9 @@ export default function Hero() {
 
   useEffect(() => {
     if (!autoRotateIntervalId) {
-        startAutoRotationLoop();
+      startAutoRotationLoop();
     }
-    
+
     return () => {
       if (autoRotateIntervalId) {
         clearInterval(autoRotateIntervalId);
@@ -118,13 +117,13 @@ export default function Hero() {
       </div>
 
       <div className="relative max-w-[58.4rem] mx-auto mt-[5rem] flex flex-col lg:flex-row justify-between items-center gap-10 px-6 lg:px-0">
-         <RotatingEyeCircle
+        <RotatingEyeCircle
           rotation={rotation}
           setRotation={setRotation}
           activeLabel={activeLabel}
           setActiveLabel={setActiveLabel}
           isMobile={isMobile}
-          labels={Object.keys(labelAngles)} 
+          labels={Object.keys(labelAngles)}
           autoRotateIntervalId={autoRotateIntervalId}
           setAutoRotateIntervalId={setAutoRotateIntervalId}
         />
@@ -132,35 +131,22 @@ export default function Hero() {
         <div
           className={`absolute ${
             isMobile
-              ? "top-1/2 left-1/2 translate-x-1/2 w-10 h-10"
+              ? "top-1/2 left-55 w-10 h-10"
               : isMedium
               ? "top-[7.5rem] left- w-[6.5rem] h-[4.1rem]"
               : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"
           } transition-all duration-500`}
         >
           <Image
-            src={arrow}
+            src={isMobile ? mobileArrow : arrow}
             alt="Curved arrow"
             fill
-            className={`object-contain pointer-events-none select-none ${
-              isMobile ? "rotate-90" : ""
-            }`}
+            className='object-contain pointer-events-none select-none transition-transform duration-500'
           />
         </div>
 
         <ContentCard activeLabel={activeLabel} labels={labels} />
       </div>
-
-      {/* Zigzag Line */}
-      {/* <div className="absolute bottom-0 w-full z-20">
-        <Image
-          src={line}
-          alt="Zigzag border"
-          width={2000}
-          height={120}
-          className="w-full h-auto object-cover pointer-events-none select-none"
-        />
-      </div> */}
     </main>
   );
 }
