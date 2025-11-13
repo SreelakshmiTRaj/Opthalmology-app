@@ -18,7 +18,7 @@ export default function ChatBubbles({ visible = true }) {
         initial={{ x: -200, opacity: 0 }}
         animate={{ x: visible ? 0 : -200, opacity: visible ? 1 : 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="flex items-start gap-2 w-[372px] h-[70px]"
+        className="flex items-start gap-2 w-[372px] h-[70px] sm:"
       >
         <Image
           src={personIconPath}

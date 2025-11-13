@@ -34,7 +34,7 @@ export default function Hero() {
     TRIAL: 180,
   };
 
-  // On mobile, the active label
+  // Mobile view
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isMobile && activeLabel === "CONCEPT") {
@@ -48,14 +48,14 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, [isMobile]);
 
-  const shortestDelta = (from, to) => {
+  const calculateShortestRotationDelta = (from, to) => {
     let diff = (to - from) % 360;
     if (diff < -180) diff += 360;
     if (diff >= 180) diff -= 360;
     return diff;
   };
 
-  const handleClickTo = (label) => {
+  const handleLabelClick = (label) => {
     const base = labelAngles[label];
     if (base === undefined) return;
 
@@ -77,10 +77,10 @@ export default function Hero() {
     });
   };
 
-  const norm = (angle) => ((angle % 360) + 360) % 360;
+  const normalizeAngle = (angle) => ((angle % 360) + 360) % 360;
 
-  const isVerticalSlot = (angle) => {
-    const a = norm(angle);
+  const isLabelInVerticalSlot = (angle) => {
+    const a = normalizeAngle(angle);
     const tol = 45;
     return a <= tol || a >= 360 - tol || Math.abs(a - 180) <= tol;
   };
@@ -89,8 +89,8 @@ export default function Hero() {
     const base = labelAngles[label];
     if (base === undefined) return 0;
 
-    const absAngle = norm(base + rotation);
-    const vertical = isVerticalSlot(absAngle);
+    const absAngle = normalizeAngle(base + rotation);
+    const vertical = isLabelInVerticalSlot(absAngle);
     let slotRotation = 0;
 
     if (vertical) {
@@ -177,7 +177,7 @@ export default function Hero() {
               return (
                 <motion.div
                   key={label}
-                  onClick={() => handleClickTo(label)}
+                  onClick={() => handleLabelClick(label)}
                   onHoverStart={() => setHoverLabel(label)}
                   onHoverEnd={() => setHoverLabel(null)}
                   animate={{ rotate: getLabelDisplayRotation(label) }}
@@ -220,6 +220,7 @@ export default function Hero() {
             })}
           </motion.div>
         </div>
+
 
         <div
           className={`absolute ${
