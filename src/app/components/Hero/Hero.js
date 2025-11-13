@@ -6,6 +6,7 @@ import ContentCard from "./ContentCard";
 
 const arrow = "/images/arrow.svg";
 const line = "/images/Group 23.svg";
+const mobileArrow = "/images/arrow_mobile.svg";
 
 const labelAngles = {
   MARKET: -90,
@@ -151,7 +152,7 @@ export default function Hero() {
       </div>
 
       {/* Zigzag Line */}
-      <div className="absolute bottom-0 w-full z-20">
+      {/* <div className="absolute bottom-0 w-full z-20">
         <Image
           src={line}
           alt="Zigzag border"
@@ -159,7 +160,7 @@ export default function Hero() {
           height={120}
           className="w-full h-auto object-cover pointer-events-none select-none"
         />
-      </div>
+      </div> */}
     </main>
   );
 }

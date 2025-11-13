@@ -44,10 +44,20 @@ export default function Body() {
         />
       </div>
 
+      <div className="absolute top-0 w-full z-10">
+        <Image
+          src={line}
+          alt="Zigzag border"
+          width={2000}
+          height={120}
+          className="w-full h-auto object-cover pointer-events-none select-none"
+        />
+      </div>
+
       {/* Content Layer (Make sure content is above the background layers) */}
       <div className="relative z-20 w-full flex flex-col items-center">
         {/* Heading */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight md:leading-[45px] font-bold text-center uppercase max-w-[784px] mx-auto mb-6 md:mb-10 px-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight md:leading-[45px] font-bold text-center uppercase max-w-[784px] mx-auto mb-6 pt-10 md:mb-10 px-4">
           IT IS OFTEN SAID THAT THE
           <br />
           <span className="text-[#3AADED]">EYE IS THE WINDOW</span> TO THE{" "}
