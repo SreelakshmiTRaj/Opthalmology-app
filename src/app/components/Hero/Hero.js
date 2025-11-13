@@ -1,32 +1,28 @@
 "use client";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import RotatingEyeCircle from "./RotatingEye";
+import ContentCard from "./ContentCard"; 
+
+const arrow = "/images/arrow.svg";
+const line = "/images/Group 23.svg";
+
+const labelAngles = {
+  MARKET: -90,
+  CONCEPT: 0,
+  DESIGN: 90,
+  TRIAL: 180,
+};
+
+const labels = ["CONCEPT", "MARKET", "TRIAL", "DESIGN"]; 
 
 export default function Hero() {
-  const eyePath = "/images/eyeImage.png";
-  const nerves = "/images/Nurves.svg";
-  const arrow = "/images/arrow.svg";
-  const line = "/images/Group 23.svg";
-  const sideArrow = "/images/sideArrow.svg";
-
-  // 1. UPDATED ORDER for auto-rotation
-  const labels = ["CONCEPT", "MARKET", "TRIAL", "DESIGN"];
-  const labelAngles = {
-    MARKET: -90,
-    CONCEPT: 0,
-    DESIGN: 90,
-    TRIAL: 180,
-  };
-
   const [rotation, setRotation] = useState(0);
   const [activeLabel, setActiveLabel] = useState("CONCEPT");
-  const [hoverLabel, setHoverLabel] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isMedium, setIsMedium] = useState(false);
   const [autoRotateIntervalId, setAutoRotateIntervalId] = useState(null);
 
-  // --- Utility Functions ---
 
   const calculateShortestRotationDelta = (from, to) => {
     let diff = (to - from) % 360;
@@ -37,67 +33,9 @@ export default function Hero() {
 
   const normalizeAngle = (angle) => ((angle % 360) + 360) % 360;
 
-  const isLabelInVerticalSlot = (angle) => {
-    const a = normalizeAngle(angle);
-    const tol = 45;
-    return a <= tol || a >= 360 - tol || Math.abs(a - 180) <= tol;
-  };
-
-  const getLabelDisplayRotation = (label) => {
-    const base = labelAngles[label];
-    if (base === undefined) return 0;
-
-    const absAngle = normalizeAngle(base + rotation);
-    const vertical = isLabelInVerticalSlot(absAngle);
-    let slotRotation = 0;
-
-    if (vertical) {
-      slotRotation = -90;
-    } else {
-      if (absAngle >= 315 || absAngle <= 45) {
-        slotRotation = 180;
-      } else {
-        slotRotation = 0;
-      }
-    }
-
-    return -rotation + slotRotation;
-  };
-
-  // --- Auto-Rotation and Click Logic ---
-
-  const handleLabelClick = (label) => {
-    // 1. Stop auto-rotation when user manually clicks
-    if (autoRotateIntervalId) {
-      clearInterval(autoRotateIntervalId);
-      setAutoRotateIntervalId(null);
-    }
-
-    const base = labelAngles[label];
-    if (base === undefined) return;
-
-    setActiveLabel(label);
-
-    const screenAngle = isMobile ? 360 : 0;
-    let desiredRotation = screenAngle - base;
-
-    setRotation((current) => {
-      const curNorm = ((current % 360) + 360) % 360;
-      let desiredNorm = ((desiredRotation % 360) + 360) % 360;
-
-      let delta = calculateShortestRotationDelta(curNorm, desiredNorm);
-
-      return current + delta;
-    });
-  };
-
-  // Function to set up the rotation loop
   const startAutoRotationLoop = () => {
-    // Determine the starting index
-    // Use the cleaned activeLabel for index search
     let currentIndex = labels.findIndex(l => l === activeLabel.trim());
     
-    // Safety check: clear any existing interval
     if (autoRotateIntervalId) {
       clearInterval(autoRotateIntervalId);
     }
@@ -106,7 +44,6 @@ export default function Hero() {
       currentIndex = (currentIndex + 1) % labels.length;
       const nextLabel = labels[currentIndex];
       
-      // The auto-rotation logic itself
       const base = labelAngles[nextLabel];
       if (base === undefined) return;
 
@@ -123,15 +60,11 @@ export default function Hero() {
 
         return current + delta;
       });
-    }, 5000); // Rotate every 5 seconds (5000ms)
+    }, 5000); 
 
     setAutoRotateIntervalId(intervalId);
   };
 
-
-  // --- useEffect Hooks ---
-
-  // 1. Check screen size
   useEffect(() => {
     const checkScreen = () => {
       const width = window.innerWidth;
@@ -143,10 +76,8 @@ export default function Hero() {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  // 2. Initial mobile view adjustment (from original code)
   useEffect(() => {
     const timer = setTimeout(() => {
-      // The original code used " CONCEPT" (with a space) to track the mobile initial state
       if (isMobile && activeLabel === "CONCEPT") {
         setActiveLabel(" CONCEPT");
         setRotation(90);
@@ -158,25 +89,17 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, [isMobile]);
 
-  // 3. Start Auto-Rotation on Mount / Clean up on unmount
   useEffect(() => {
-    // Only start the loop if an interval isn't already running
-    // The conditional check for activeLabel is important because the cleanup function might clear the ID.
     if (!autoRotateIntervalId) {
         startAutoRotationLoop();
     }
     
-    // Cleanup function to clear the interval when the component unmounts
     return () => {
-      // Clear the interval ID if it was successfully set
       if (autoRotateIntervalId) {
         clearInterval(autoRotateIntervalId);
       }
     };
-  }, [isMobile, activeLabel]); // Rerun if mobile state or activeLabel changes
-
-
-  // --- Rendered Component ---
+  }, [isMobile, activeLabel]);
 
   return (
     <main className="pt-1 pb-32 relative z-10">
@@ -194,110 +117,16 @@ export default function Hero() {
       </div>
 
       <div className="relative max-w-[58.4rem] mx-auto mt-[5rem] flex flex-col lg:flex-row justify-between items-center gap-10 px-6 lg:px-0">
-        <div className="relative w-[22.4rem] h-[22.9rem] flex items-center justify-center mx-auto">
-          {/* NON-ROTATING Eye Image */}
-          <div className="relative w-[16.3rem] h-[16.25rem] z-10">
-            <Image
-              src={eyePath}
-              alt="Eye"
-              fill
-              className="object-contain pointer-events-none select-none"
-            />
-          </div>
-          
-          {/* ROTATING Container (Nerves and Labels) */}
-          <motion.div
-            className="absolute w-full h-full flex items-center justify-center z-20"
-            animate={{ rotate: rotation }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          >
-            {/* Nerves Image inside the rotating container */}
-            <div className="absolute top-[1.2rem] left-[1.3rem] w-[19.7rem] h-[20rem]">
-              <Image
-                src={nerves}
-                alt="Nerves"
-                fill
-                className="object-contain pointer-events-none select-none"
-              />
-            </div>
-
-            {/* Labels inside the rotating container */}
-            {Object.keys(labelAngles).map((label) => { // Map over labelAngles to maintain position logic
-              const isActive = activeLabel.trim() === label; 
-              const isHovering = hoverLabel === label;
-
-              // Desktop positions (unchanged)
-              const desktopPosition =
-                label === "MARKET"
-                  ? "top-[0.04rem] left-1/2 -translate-x-1/2"
-                  : label === "CONCEPT"
-                  ? "right-[-2.2rem] top-45 -translate-y-1/2"
-                  : label === "DESIGN"
-                  ? "bottom-[0.2rem] left-1/2 -translate-x-1/2"
-                  : "left-[-2.1rem] top-45 -translate-y-1/2";
-
-              // Mobile/medium positions (unchanged)
-              const mobilePosition =
-                label === "CONCEPT"
-                  ? "bottom-0 left-1/2 -translate-x-1/2 rotate-90"
-                  : label === "TRIAL"
-                  ? "top-0 left-1/2 -translate-x-1/2 rotate-90"
-                  : label === "DESIGN"
-                  ? "-left-8 top-1/2 -translate-y-1/2 rotate-90"
-                  : "-right-8 top-1/2 -translate-y-1/2 rotate-90";
-
-              const positionClasses = isMobile
-                ? mobilePosition
-                : desktopPosition;
-
-              return (
-                <motion.div
-                  key={label}
-                  onClick={() => handleLabelClick(label)}
-                  onHoverStart={() => setHoverLabel(label)}
-                  onHoverEnd={() => setHoverLabel(null)}
-                  // The label counter-rotates to stay upright relative to the screen
-                  animate={{ rotate: getLabelDisplayRotation(label) }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className={`group absolute ${positionClasses}
-        text-xs sm:text-sm font-semibold cursor-pointer rounded-[4px]
-        w-[6.1rem] h-[2.625rem] flex items-center justify-center
-        px-[2.125rem] py-[1rem]
-        ${isActive ? "bg-white text-black" : "bg-[#0B2A4A] text-white"}
-      `}
-                >
-                  {label}
-
-                  {isActive && (
-                    <motion.div
-                      initial={{ y: 10, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: 10, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className={`absolute left-1/2 -translate-x-1/2 h-[3px] w-[28px] bg-white rounded-sm
-            ${label === "CONCEPT" ? "bottom-[-6px]" : "bottom-[-10px]"}`}
-                    />
-                  )}
-
-                  <AnimatePresence>
-                    {!isActive && isHovering && (
-                      <motion.div
-                        key={`${label}-hover`}
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -20, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: "easeOut" }}
-                        className={`absolute left-1/2 -translate-x-1/2 h-[3px] w-[28px] bg-white/70 rounded-sm
-              ${label === "CONCEPT" ? "bottom-[-6px]" : "bottom-[-10px]"}`}
-                      />
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-
+         <RotatingEyeCircle
+          rotation={rotation}
+          setRotation={setRotation}
+          activeLabel={activeLabel}
+          setActiveLabel={setActiveLabel}
+          isMobile={isMobile}
+          labels={Object.keys(labelAngles)} 
+          autoRotateIntervalId={autoRotateIntervalId}
+          setAutoRotateIntervalId={setAutoRotateIntervalId}
+        />
 
         <div
           className={`absolute ${
@@ -318,113 +147,7 @@ export default function Hero() {
           />
         </div>
 
-        <div className="relative w-full lg:w-1/2 pt-10 lg:pl-16 flex flex-col items-center lg:items-start text-center lg:text-left">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeLabel}
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 40 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="relative w-[431px] h-[221px] rounded-[32px]
-                bg-[linear-gradient(90deg,rgba(58,173,237,0.0)_0%,rgba(58,173,237,0.01)_100%)]
-                backdrop-blur-[5px] p-8 text-white leading-relaxed shadow-[0_4px_25px_rgba(0,0,0,0.25)]"
-            >
-              {activeLabel.trim() === "MARKET" && (
-                <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
-                  The market for clinical monitoring devices, including OCT
-                  technology, is experiencing rapid growth driven by the
-                  escalating demand for early disease detection and personalized
-                  healthcare solutions.
-                </p>
-              )}
-              {activeLabel.trim() === "CONCEPT" && (
-                <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
-                  Our research is vital for tackling the increasing global
-                  burden of eye diseases, particularly as vision impairment and
-                  blindness become more prevalent in aging populations.
-                </p>
-              )}
-              {activeLabel.trim() === "DESIGN" && (
-                <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
-                  Developing clinical monitoring systems utilizing OCT devices,
-                  with a focus on enhancing image resolution, improving ease of
-                  use, and integrating advanced data analytics.
-                </p>
-              )}
-              {activeLabel.trim() === "TRIAL" && (
-                <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
-                  Clinical trials leveraging OCT technology are crucial for
-                  assessing the safety and efficacy of new treatments, offering
-                  real-time imaging data to monitor patient responses and
-                  outcomes.
-                </p>
-              )}
-
-              <div className="flex items-center space-x-1.5 mt-6 justify-start">
-                {/* Use the new label order for the dots */}
-                {labels.map((label) => {
-                  const isActive = activeLabel.trim() === label;
-                  return (
-                    <div
-                      key={label}
-                      className={`h-[9px] transition-all duration-300 rounded-[2px] ${
-                        isActive
-                          ? "w-[19px] bg-[#3AADED] opacity-100"
-                          : "w-[9px] bg-white/35 opacity-80"
-                      }`}
-                    ></div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* CTA */}
-          <div className="mt-10 w-[27rem] h-[4.4rem] rounded-[24px] flex flex-col justify-center px-6">
-            <h3 className="text-[1.375rem] leading-none font-bold uppercase tracking-[0.04em] text-white font-poppins">
-              YOUR VISION IS OUR VISION
-            </h3>
-
-            <a
-              href="#"
-              className="group inline-flex items-center font-poppins font-semibold text-[1rem] leading-none text-[#3AADED] transition duration-300"
-            >
-              <span className="whitespace-nowrap">
-                Let us guide you on your journey to FDA approval
-              </span>
-
-              <div
-                className="ml-3 w-10 h-10 border border-[#3AADED] rounded-full flex items-center justify-center 
-    bg-transparent transition-all duration-300 ease-in-out 
-    group-hover:bg-[#3AADED] group-hover:border-[#3AADED] group-hover:scale-110 relative flex-shrink-0"
-              >
-                <div className="relative w-4 h-4 flex items-center justify-center">
-                  <Image
-                    src={sideArrow}
-                    alt="Arrow"
-                    fill
-                    className="object-contain transition-opacity duration-300 ease-in-out group-hover:opacity-0"
-                  />
-                </div>
-
-                <svg
-                  className="absolute w-5 h-5 text-white opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 12h14m0 0l-5-5m5 5l-5 5"
-                  />
-                </svg>
-              </div>
-            </a>
-          </div>
-        </div>
+        <ContentCard activeLabel={activeLabel} labels={labels} />
       </div>
 
       {/* Zigzag Line */}
