@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BodyAnimation from "./BodyAnimation";
 import BodyDescriptionBox from "./BodyDescriptionBox";
 import ChatBubbles from "./ChatBubbles";
@@ -10,15 +10,11 @@ const line = "/images/Group 23.svg";
 
 export default function Body() {
   const [selectedLabel, setSelectedLabel] = useState(null);
-
   const [visible, setVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Function to set the selected label when clicked
-  const handleLabelClick = (label) => {
-    setSelectedLabel(label);
-  };
+  const handleLabelClick = (label) => setSelectedLabel(label);
 
-  // Function for clicks on background
   const handleSectionClick = (e) => {
     if (
       e.target.closest(".body-image") ||
@@ -30,12 +26,20 @@ export default function Body() {
     setTimeout(() => setVisible(true), 500);
   };
 
+  // Check screen width
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth < 768);
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
   return (
     <section
       className="relative w-full text-white py-12 px-6 bg-[#0a1429] flex flex-col items-center bg-no-repeat bg-cover bg-center"
       onClick={handleSectionClick}
     >
-      {/* Background Image Layer */}
+      {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
           src={backgroundSvgPath}
@@ -46,7 +50,7 @@ export default function Body() {
         />
       </div>
 
-      {/*ZigZag image*/}
+      {/* Zigzag Line */}
       <div className="absolute top-0 w-full z-10">
         <Image
           src={line}
@@ -57,7 +61,9 @@ export default function Body() {
         />
       </div>
 
+      {/* Main Content */}
       <div className="relative z-20 w-full flex flex-col items-center">
+        {/* Heading */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight md:leading-[45px] font-bold text-center uppercase max-w-[784px] mx-auto mb-6 pt-10 md:mb-10 px-4">
           IT IS OFTEN SAID THAT THE
           <br />
@@ -65,19 +71,47 @@ export default function Body() {
           <span className="whitespace-nowrap">SOUL.</span>
         </h2>
 
-        <div className="relative w-[1101px] h-[745px]">
-          {/*Body diagram*/}
-          <BodyAnimation
-            selectedLabel={selectedLabel}
-            onLabelClick={handleLabelClick}
-          />
+        {/* Conditional Layout */}
+        {isMobile ? (
+          <div className="flex flex-col w-full mt-6 gap-6">
+            {/* Chat bubbles */}
+            <ChatBubbles visible={visible} />
 
-          {/*Description box*/}
-          <BodyDescriptionBox selectedLabel={selectedLabel} />
+            {/* Mobile two-column layout */}
+            <div className="w-full flex flex-row gap-4">
+              {/* LEFT COLUMN → LABELS */}
+              <div className="w-[45%] max-h-[420px] overflow-y-auto pr-2 custom-scrollbar">
+                <BodyAnimation
+                  selectedLabel={selectedLabel}
+                  onLabelClick={handleLabelClick}
+                  isMobile={true}
+                />
+              </div>
 
-          {/*Chat bubbles*/}
-          <ChatBubbles visible={visible} />
-        </div>
+              {/* RIGHT COLUMN → BODY IMAGE */}
+              <div className="w-[55%] flex justify-center relative">
+                <BodyAnimation
+                  selectedLabel={selectedLabel}
+                  onLabelClick={handleLabelClick}
+                  isMobileBodyOnly={true}
+                />
+              </div>
+            </div>
+
+            {/* Description */}
+            <BodyDescriptionBox selectedLabel={selectedLabel} />
+          </div>
+        ) : (
+          // Desktop
+          <div className="relative w-[1101px] h-[745px]">
+            <BodyAnimation
+              selectedLabel={selectedLabel}
+              onLabelClick={handleLabelClick}
+            />
+            <BodyDescriptionBox selectedLabel={selectedLabel} />
+            <ChatBubbles visible={visible} />
+          </div>
+        )}
       </div>
     </section>
   );
