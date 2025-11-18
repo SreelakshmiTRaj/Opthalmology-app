@@ -80,51 +80,56 @@ export default function BodyAnimation({
     isMobileBodyOnly,
   ]);
 
+  
   if (isMobile) {
     return (
       <div
         className="relative w-full max-h-[70vh] overflow-y-auto 
-                 scrollbar-thin scrollbar-thumb-blue-400/50 scrollbar-track-transparent 
-                 [scrollbar-gutter:stable] pr-2 ml-auto 
-                 [&::-webkit-scrollbar-track]:!mr-auto 
-                 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full"
+                 scrollbar-thin scrollbar-thumb-blue-400/50 scrollbar-track-transparent
+                 [scrollbar-gutter:stable]
+                 pl-3
+                 [&::-webkit-scrollbar]:w-1.5
+                 [&::-webkit-scrollbar-thumb]:rounded-full"
+        style={{ direction: "rtl" }}
       >
-        {[...rightSideLabels, ...leftSideLabels].map((label, i) => {
-          const isActive = selectedLabel === label.text;
-          const isRightSide = i < rightSideLabels.length;
+        <div style={{ direction: "ltr" }}>
+          {[...rightSideLabels, ...leftSideLabels].map((label, i) => {
+            const isActive = selectedLabel === label.text;
+            const isRightSide = i < rightSideLabels.length;
 
-          const baseBackground = isRightSide
-            ? "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)"
-            : "linear-gradient(90deg, rgba(255,255,255,0) 50%, rgba(255,255,255,0.2) 100%)";
+            const baseBackground = isRightSide
+              ? "linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)"
+              : "linear-gradient(90deg, rgba(255,255,255,0) 50%, rgba(255,255,255,0.2) 100%)";
 
-          const hoverBackground = isRightSide
-            ? "linear-gradient(90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)"
-            : "linear-gradient(-90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)";
+            const hoverBackground = isRightSide
+              ? "linear-gradient(90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)"
+              : "linear-gradient(-90deg, rgba(58,173,237,0.5) 0%, rgba(58,173,237,0) 75%)";
 
-          return (
-            <motion.div
-              key={i}
-              className={`
-              flex items-center justify-start 
-              text-[13px] font-bold rounded-[24px] whitespace-nowrap 
-              cursor-pointer transition-all duration-300 mb-2 
-              px-[15px] py-[10px] w-full 
-              ${
-                isActive
-                  ? "text-[#3AADED] border border-[#3AADED]"
-                  : "text-white border border-transparent"
-              }
-            `}
-              style={{
-                background: isActive ? hoverBackground : baseBackground,
-              }}
-              onClick={() => onLabelClick(label.text)}
-              whileTap={{ scale: 0.96 }}
-            >
-              {label.text}
-            </motion.div>
-          );
-        })}
+            return (
+              <motion.div
+                key={i}
+                className={`
+                flex items-center justify-start 
+                text-[13px] font-bold rounded-[24px] whitespace-nowrap 
+                cursor-pointer transition-all duration-300 mb-2 
+                px-[15px] py-[10px] w-full 
+                ${
+                  isActive
+                    ? "text-[#3AADED] border border-[#3AADED]"
+                    : "text-white border border-transparent"
+                }
+              `}
+                style={{
+                  background: isActive ? hoverBackground : baseBackground,
+                }}
+                onClick={() => onLabelClick(label.text)}
+                whileTap={{ scale: 0.96 }}
+              >
+                {label.text}
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     );
   }

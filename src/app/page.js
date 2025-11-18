@@ -29,9 +29,9 @@ export default function Home() {
       <section className="relative z-30 w-full mx-auto">
           <Body />
       </section>
-      {/* <section className="relative z-40">
+      <section className="relative z-40">
         <Overview />
-      </section> */}
+      </section>
     </main>
   );
 }

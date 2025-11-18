@@ -78,7 +78,7 @@ export default function Body() {
             <ChatBubbles visible={visible} />
 
             {/* Mobile two-column layout */}
-            <div className="w-full flex flex-row gap-4">
+            <div className="w-full flex flex-row gap-4 mt-15">
               {/* LEFT COLUMN → LABELS */}
               <div className="w-[45%] max-h-[420px] overflow-y-auto pr-2 custom-scrollbar">
                 <BodyAnimation
@@ -88,21 +88,23 @@ export default function Body() {
                 />
               </div>
 
-              {/* RIGHT COLUMN → BODY IMAGE */}
-              <div className="w-[55%] flex justify-center relative">
+              {/* RIGHT COLUMN → BODY IMAGE + DESCRIPTION BELOW IT */}
+              <div className="w-[55%] flex flex-col items-center relative gap-4">
+                {/* Body only section with full animations */}
                 <BodyAnimation
                   selectedLabel={selectedLabel}
                   onLabelClick={handleLabelClick}
                   isMobileBodyOnly={true}
                 />
+
+                {/* Description placed directly under the body image */}
+                <div className="w-full">
+                  <BodyDescriptionBox selectedLabel={selectedLabel} isMobile={true}/>
+                </div>
               </div>
             </div>
-
-            {/* Description */}
-            <BodyDescriptionBox selectedLabel={selectedLabel} />
           </div>
         ) : (
-          // Desktop
           <div className="relative w-[1101px] h-[745px]">
             <BodyAnimation
               selectedLabel={selectedLabel}
