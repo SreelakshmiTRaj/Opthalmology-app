@@ -3,16 +3,18 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { descriptions } from "./descriptions";
 
-export default function BodyDescriptionBox({ selectedLabel, isMobile = false }) {
+export default function BodyDescriptionBox({
+  selectedLabel,
+  isMobile = false,
+}) {
   const rightRedLinePath = "/images/rightRedLine.svg";
   const rightBlueLinePath = "/images/rightBlueLine.svg";
   const leftBlueLinePath = "/images/leftBlueline.svg";
   const leftRedLinePath = "/images/leftRedline.svg";
 
-  // ---------- MOBILE (small, stacked, placed in flow under the body) ----------
   if (isMobile) {
     return (
-      <div className="w-full px-4">
+      <div className="w-full px-0 flex flex-col items-start text-left">
         <AnimatePresence mode="wait">
           {selectedLabel && (
             <motion.div
@@ -24,13 +26,13 @@ export default function BodyDescriptionBox({ selectedLabel, isMobile = false }) 
               className="relative w-full overflow-hidden"
             >
               {/* Left/top corner decorative lines (smaller) */}
-              <div className="absolute top-10 -left-10 w-[90px] h-[48px] pointer-events-none">
+              <div className="absolute top-0 left-0 w-[90px] h-[48px] pointer-events-none">
                 <Image
                   src={leftRedLinePath}
                   alt="left red line"
                   width={120}
                   height={60}
-                  className="opacity-90"
+              el    className="opacity-90"
                 />
                 <Image
                   src={leftBlueLinePath}
@@ -42,14 +44,16 @@ export default function BodyDescriptionBox({ selectedLabel, isMobile = false }) 
               </div>
 
               {/* Title */}
-              <h3 className="text-white font-extrabold text-[16px] leading-5">
-                {selectedLabel}
-              </h3>
+              <div className="mt-[90px] text-left w-full flex flex-col items-start">
+                <h3 className="text-white font-extrabold text-[16px] leading-5">
+                  {selectedLabel}
+                </h3>
 
-              {/* Description */}
-              <p className="mt-2 text-white text-[13px] leading-[18px]">
-                {descriptions[selectedLabel]}
-              </p>
+                {/* Description */}
+                <p className="mt-3 text-white text-[13px] leading-[18px]">
+                  {descriptions[selectedLabel]}
+                </p>
+              </div>
 
               {/* Right/bottom corner decorative lines (smaller) */}
               <div className="absolute bottom-0 right-0 w-[140px] h-[80px] pointer-events-none">

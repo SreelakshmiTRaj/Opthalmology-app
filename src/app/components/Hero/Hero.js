@@ -131,7 +131,7 @@ export default function Hero() {
         <div
           className={`absolute ${
             isMobile
-              ? "top-1/2 left-55 w-10 h-10"
+              ? "top-1/2 left-50 w-10 h-10"
               : isMedium
               ? "top-[7.5rem] left- w-[6.5rem] h-[4.1rem]"
               : "top-[7.5rem] left-[26rem] w-[6.5rem] h-[4.1rem]"

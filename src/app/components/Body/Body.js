@@ -36,7 +36,7 @@ export default function Body() {
 
   return (
     <section
-      className="relative w-full text-white py-12 px-6 bg-[#0a1429] flex flex-col items-center bg-no-repeat bg-cover bg-center"
+      className="relative w-full text-white py-12 px-6 bg-[#0a1429] flex flex-col items-start md:items-center bg-no-repeat bg-cover bg-center"
       onClick={handleSectionClick}
     >
       {/* Background Image */}
@@ -89,7 +89,7 @@ export default function Body() {
               </div>
 
               {/* RIGHT COLUMN → BODY IMAGE + DESCRIPTION BELOW IT */}
-              <div className="w-[55%] flex flex-col items-center relative gap-4">
+              <div className="w-[55%] flex flex-col items-start relative gap-4">
                 {/* Body only section with full animations */}
                 <BodyAnimation
                   selectedLabel={selectedLabel}
