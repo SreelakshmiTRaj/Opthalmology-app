@@ -14,7 +14,7 @@ export default function BodyDescriptionBox({
 
   if (isMobile) {
     return (
-      <div className="w-full px-0 flex flex-col items-start text-left">
+      <div className="w-full flex flex-col items-start text-left">
         <AnimatePresence mode="wait">
           {selectedLabel && (
             <motion.div
@@ -23,53 +23,56 @@ export default function BodyDescriptionBox({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.32, ease: "easeInOut" }}
-              className="relative w-full overflow-hidden"
+              /* IMPORTANT — brings the whole description box ABOVE the body */
+              className="relative w-full bg-transparent px-4 py-4 z-[40]"
             >
-              {/* Left/top corner decorative lines (smaller) */}
-              <div className="absolute top-0 left-0 w-[90px] h-[48px] pointer-events-none">
-                <Image
-                  src={leftRedLinePath}
-                  alt="left red line"
-                  width={120}
-                  height={60}
-              el    className="opacity-90"
-                />
+              {/* TOP-LEFT CORNER */}
+              <div className="absolute top-0 left-0 pointer-events-none">
+                <Image src={leftRedLinePath} alt="" width={110} height={60} />
                 <Image
                   src={leftBlueLinePath}
-                  alt="left blue line"
-                  width={34}
-                  height={64}
+                  alt=""
+                  width={40}
+                  height={70}
                   className="absolute top-[6px] left-[6px]"
                 />
               </div>
 
-              {/* Title */}
-              <div className="mt-[90px] text-left w-full flex flex-col items-start">
-                <h3 className="text-white font-extrabold text-[16px] leading-5">
+              {/* ORGAN IMAGE — FIXED Z-INDEX SO IT APPEARS ABOVE BODY */}
+              {selectedLabel && (
+                <div className="absolute top-[8px] right-[8px] w-[80px] h-[80px] z-[50]">
+                  <Image
+                    src={`/images/${selectedLabel
+                      .toLowerCase()
+                      .replace(/['’\s]+/g, "")}_part.svg`}
+                    alt={`${selectedLabel} organ`}
+                    width={55}
+                    height={55}
+                    className="object-contain"
+                  />
+                </div>
+              )}
+
+              {/* CONTENT — REDUCED TOP & BOTTOM SPACING */}
+              <div className="pt-[20px] pb-[25px] pr-[30px]">
+                <h3 className="text-white font-extrabold text-[17px] leading-5">
                   {selectedLabel}
                 </h3>
 
-                {/* Description */}
-                <p className="mt-3 text-white text-[13px] leading-[18px]">
+                <p className="mt-2 text-white text-[13px] leading-[19px]">
                   {descriptions[selectedLabel]}
                 </p>
               </div>
 
-              {/* Right/bottom corner decorative lines (smaller) */}
-              <div className="absolute bottom-0 right-0 w-[140px] h-[80px] pointer-events-none">
-                <Image
-                  src={rightRedLinePath}
-                  alt="right red line"
-                  width={160}
-                  height={90}
-                  className="absolute bottom-0 right-0 opacity-90"
-                />
+              {/* BOTTOM-RIGHT CORNER */}
+              <div className="absolute bottom-0 right-0 pointer-events-none">
+                <Image src={rightRedLinePath} alt="" width={150} height={80} />
                 <Image
                   src={rightBlueLinePath}
-                  alt="right blue line"
-                  width={140}
-                  height={140}
-                  className="absolute bottom-[6px] right-[6px] opacity-90"
+                  alt=""
+                  width={130}
+                  height={130}
+                  className="absolute bottom-[6px] right-[6px]"
                 />
               </div>
             </motion.div>

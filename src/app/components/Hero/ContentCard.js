@@ -7,7 +7,7 @@ const sideArrow = "/images/sideArrow.svg";
 export default function ContentCard({ activeLabel, labels }) {
   const content = {
     MARKET: (
-      <p className="text-[15px] sm:text-[16px] font-bold text-white/90">
+      <p className="text-[15px] max-sm:text-[16px] font-bold text-white/90">
         The market for clinical monitoring devices, including OCT technology, is
         experiencing rapid growth driven by the escalating demand for early
         disease detection and personalized healthcare solutions.

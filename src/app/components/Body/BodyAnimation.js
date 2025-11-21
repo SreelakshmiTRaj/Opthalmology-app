@@ -84,15 +84,12 @@ export default function BodyAnimation({
   if (isMobile) {
     return (
       <div
-        className="relative w-full max-h-[70vh] overflow-y-auto 
+        className="relative w-full max-h-[350px] overflow-y-auto 
                  scrollbar-thin scrollbar-thumb-blue-400/50 scrollbar-track-transparent
-                 [scrollbar-gutter:stable]
-                 pl-3
-                 [&::-webkit-scrollbar]:w-1.5
-                 [&::-webkit-scrollbar-thumb]:rounded-full"
-        style={{ direction: "rtl" }}
+                 pr-1"
+        // style={{ direction: "rtl" }}
       >
-        <div style={{ direction: "ltr" }}>
+        {/* <div style={{ direction: "ltr" }}> */}
           {[...rightSideLabels, ...leftSideLabels].map((label, i) => {
             const isActive = selectedLabel === label.text;
             const isRightSide = i < rightSideLabels.length;
@@ -130,7 +127,6 @@ export default function BodyAnimation({
             );
           })}
         </div>
-      </div>
     );
   }
 
@@ -146,27 +142,6 @@ export default function BodyAnimation({
               className="object-contain"
             />
           </div>
-
-          <AnimatePresence mode="wait">
-            {selectedLabel && (
-              <motion.div
-                key={selectedLabel + "-mobile-part"}
-                className="absolute inset-0 z-20"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <Image
-                  src={`/images/${selectedLabel
-                    .toLowerCase()
-                    .replace(/['’\s]+/g, "")}_part.svg`}
-                  alt="Organ Highlight"
-                  fill
-                  className="object-contain"
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {!selectedLabel || selectedLabel !== "Geriatrics" ? (
             <div className="absolute inset-0 z-10">

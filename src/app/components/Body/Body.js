@@ -96,12 +96,14 @@ export default function Body() {
                   onLabelClick={handleLabelClick}
                   isMobileBodyOnly={true}
                 />
-
-                {/* Description placed directly under the body image */}
-                <div className="w-full">
-                  <BodyDescriptionBox selectedLabel={selectedLabel} isMobile={true}/>
-                </div>
               </div>
+            </div>
+            {/* Description placed directly under the body image */}
+            <div className="w-full">
+              <BodyDescriptionBox
+                selectedLabel={selectedLabel}
+                isMobile={true}
+              />
             </div>
           </div>
         ) : (
