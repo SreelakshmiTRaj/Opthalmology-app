@@ -87,9 +87,9 @@ export default function BodyAnimation({
         className="relative w-full max-h-[350px] overflow-y-auto 
                  scrollbar-thin scrollbar-thumb-blue-400/50 scrollbar-track-transparent
                  pr-1"
-        // style={{ direction: "rtl" }}
+        style={{ direction: "rtl" }}
       >
-        {/* <div style={{ direction: "ltr" }}> */}
+        <div style={{ direction: "rtl" }}>
           {[...rightSideLabels, ...leftSideLabels].map((label, i) => {
             const isActive = selectedLabel === label.text;
             const isRightSide = i < rightSideLabels.length;
@@ -127,6 +127,7 @@ export default function BodyAnimation({
             );
           })}
         </div>
+      </div>
     );
   }
 

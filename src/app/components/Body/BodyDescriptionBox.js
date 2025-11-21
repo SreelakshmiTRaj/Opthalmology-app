@@ -38,7 +38,7 @@ export default function BodyDescriptionBox({
               </div>
 
               {/* ORGAN IMAGE*/}
-              <div className="absolute top-[4px] right-[4px] w-[55px] h-[55px] z-[50]">
+              <div className="absolute top-[-35px] right-10 w-[75px] h-[75px] z-[50]">
                 <Image
                   src={`/images/${selectedLabel
                     .toLowerCase()
@@ -50,18 +50,18 @@ export default function BodyDescriptionBox({
               </div>
 
               {/* CONTENT*/}
-              <div className="pt-[5px] pb-[18px] pr-[20px]">
+              <div className="pt-[10px] left-5 pb-[18px] pr-[20px]">
                 <h3 className="text-white font-extrabold text-[16px] leading-[18px]">
                   {selectedLabel}
                 </h3>
 
-                <p className="mt-2 text-white text-[13px] leading-[14px]">
+                <p className="mt-2 text-white text-[12px] leading-[17px]">
                   {descriptions[selectedLabel]}
                 </p>
               </div>
 
-              {/* BOTTOM-RIGHT CORNER*/}
-              <div className="absolute bottom-0 right-0 pointer-events-none">
+              {/*BOTTOM-RIGHT CORNER*/}
+              <div className="absolute -bottom-0 right-0 pointer-events-none">
                 <Image src={rightRedLinePath} alt="" width={110} height={50} />
                 <Image
                   src={rightBlueLinePath}
@@ -78,7 +78,7 @@ export default function BodyDescriptionBox({
     );
   }
 
-  // ---------- DESKTOP (UNCHANGED) ----------
+  // DESKTOP
   return (
     <>
       <AnimatePresence mode="wait">

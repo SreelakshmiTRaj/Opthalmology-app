@@ -24,3 +24,27 @@ body {
   color: var(--foreground);
   font-family: Poppins, sans-serif;
 }
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #3AADED transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #79d1ff 0%,
+    #3aaded 30%,
+    #008df7 100%
+  );
+  border-radius: 8px;
+}
+
