@@ -19,60 +19,56 @@ export default function BodyDescriptionBox({
           {selectedLabel && (
             <motion.div
               key={selectedLabel}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.32, ease: "easeInOut" }}
-              /* IMPORTANT — brings the whole description box ABOVE the body */
-              className="relative w-full bg-transparent px-4 py-4 z-[40]"
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.28, ease: "easeInOut" }}
+              className="relative w-full bg-transparent px-3 py-3 z-[40]"
             >
-              {/* TOP-LEFT CORNER */}
+              {/* TOP-LEFT CORNER*/}
               <div className="absolute top-0 left-0 pointer-events-none">
-                <Image src={leftRedLinePath} alt="" width={110} height={60} />
+                <Image src={leftRedLinePath} alt="" width={90} height={50} />
                 <Image
                   src={leftBlueLinePath}
                   alt=""
-                  width={40}
-                  height={70}
-                  className="absolute top-[6px] left-[6px]"
+                  width={30}
+                  height={55}
+                  className="absolute top-[4px] left-[4px]"
                 />
               </div>
 
-              {/* ORGAN IMAGE — FIXED Z-INDEX SO IT APPEARS ABOVE BODY */}
-              {selectedLabel && (
-                <div className="absolute top-[8px] right-[8px] w-[80px] h-[80px] z-[50]">
-                  <Image
-                    src={`/images/${selectedLabel
-                      .toLowerCase()
-                      .replace(/['’\s]+/g, "")}_part.svg`}
-                    alt={`${selectedLabel} organ`}
-                    width={55}
-                    height={55}
-                    className="object-contain"
-                  />
-                </div>
-              )}
+              {/* ORGAN IMAGE*/}
+              <div className="absolute top-[4px] right-[4px] w-[55px] h-[55px] z-[50]">
+                <Image
+                  src={`/images/${selectedLabel
+                    .toLowerCase()
+                    .replace(/['’\s]+/g, "")}_part.svg`}
+                  alt={`${selectedLabel} organ`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
 
-              {/* CONTENT — REDUCED TOP & BOTTOM SPACING */}
-              <div className="pt-[20px] pb-[25px] pr-[30px]">
-                <h3 className="text-white font-extrabold text-[17px] leading-5">
+              {/* CONTENT*/}
+              <div className="pt-[5px] pb-[18px] pr-[20px]">
+                <h3 className="text-white font-extrabold text-[16px] leading-[18px]">
                   {selectedLabel}
                 </h3>
 
-                <p className="mt-2 text-white text-[13px] leading-[19px]">
+                <p className="mt-2 text-white text-[13px] leading-[14px]">
                   {descriptions[selectedLabel]}
                 </p>
               </div>
 
-              {/* BOTTOM-RIGHT CORNER */}
+              {/* BOTTOM-RIGHT CORNER*/}
               <div className="absolute bottom-0 right-0 pointer-events-none">
-                <Image src={rightRedLinePath} alt="" width={150} height={80} />
+                <Image src={rightRedLinePath} alt="" width={110} height={50} />
                 <Image
                   src={rightBlueLinePath}
                   alt=""
-                  width={130}
-                  height={130}
-                  className="absolute bottom-[6px] right-[6px]"
+                  width={110}
+                  height={110}
+                  className="absolute bottom-[4px] right-[4px]"
                 />
               </div>
             </motion.div>
